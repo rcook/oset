@@ -10,8 +10,8 @@ Portability : portable
 This module provides @OSet@, an insert-order-preserving set, with type class
 instances for @Foldable@, @Semigroup@, @Monoid@ and @Data@.
 
-This is intended to be API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html
-OSet> in <http://hackage.haskell.org/package/ordered-containers-0.1.1 unordered containers>
+This is intended to be API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html OSet>
+in <http://hackage.haskell.org/package/ordered-containers-0.1.1 unordered-containers>
 but with a few extra type class instances.
 -}
 
@@ -56,7 +56,7 @@ instance Ord a => Monoid (OSet a) where
     mempty = empty
 
 -- | \(O(log(N))\). Append an element to the set if the set does not already
--- contain the element.
+-- contain the element. The element is ignored if it is already in the set.
 (|>) :: Ord a
     => OSet a   -- ^ set
     -> a        -- ^ element
