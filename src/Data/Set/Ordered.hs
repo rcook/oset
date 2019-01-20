@@ -24,6 +24,7 @@ module Data.Set.Ordered
     , (|<)
     , OSet()
     , empty
+    , filter
     , fromList
     , member
     , notMember
@@ -42,11 +43,13 @@ import qualified Data.Sequence as Seq
                     , deleteAt
                     , elemIndexL
                     , empty
+                    , filter
                     , singleton
                     )
 import           Data.Set (Set)
 import qualified Data.Set as Set
                     ( empty
+                    , filter
                     , insert
                     , member
                     , singleton
@@ -133,3 +136,10 @@ notMember :: Ord a
     -> OSet a   -- ^ set
     -> Bool     -- ^ @True@ if element is not in set, @False@ otherwise
 notMember = (not .) . member
+
+-- | \(O(N)\). Filter a set by returning a set whose elements satisfy the
+-- predicate.
+filter :: (a -> Bool)  -- ^ predicate
+    -> OSet a       -- ^ set
+    -> OSet a       -- ^ set
+filter p (OSet xsSet xsSeq) = OSet (Set.filter p xsSet) (Seq.filter p xsSeq)
