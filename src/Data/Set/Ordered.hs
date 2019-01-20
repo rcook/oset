@@ -26,6 +26,7 @@ module Data.Set.Ordered
     , empty
     , filter
     , fromList
+    , map
     , member
     , notMember
     , singleton
@@ -54,7 +55,7 @@ import qualified Data.Set as Set
                     , member
                     , singleton
                     )
-import           Prelude ((.), Bool, Eq, Ord, Show(..), not, otherwise)
+import           Prelude ((<$>), (.), Bool, Eq, Ord, Show(..), not, otherwise)
 
 -- | An @OSet@ behaves much like a @Set@ but remembers the order in which the
 -- elements were originally inserted.
@@ -143,3 +144,13 @@ filter :: (a -> Bool)  -- ^ predicate
     -> OSet a       -- ^ set
     -> OSet a       -- ^ set
 filter p (OSet xsSet xsSeq) = OSet (Set.filter p xsSet) (Seq.filter p xsSeq)
+
+-- | \(O(N log(N))\). Return the set obtained by applying a function to each
+-- element of this set. Note that size of the resulting set may be smaller than
+-- the original. This fact, along with the @Ord@ constraint, mean that @OSet@
+-- cannot provide a lawful @Functor@ instance.
+map :: Ord b
+    => (a -> b)
+    -> OSet a
+    -> OSet b
+map f (OSet _ xsSeq) = foldl' (|>) empty (f <$> xsSeq)

@@ -98,9 +98,39 @@ main = hspec $ do
             2 `OSet.member` a `shouldBe` True
             3 `OSet.member` a `shouldBe` True
             4 `OSet.member` a `shouldBe` True
+            length a `shouldBe` 4
             let b = OSet.filter odd a
             b `shouldBe` OSet.fromList [1, 3]
             1 `OSet.member` b `shouldBe` True
             2 `OSet.member` b `shouldBe` False
             3 `OSet.member` b `shouldBe` True
             4 `OSet.member` b `shouldBe` False
+            length b `shouldBe` 2
+
+    describe "map" $ do
+        it "transforms elements" $ do
+            let a = OSet.fromList [-1, 1, -2, 2]
+            (-1) `OSet.member` a `shouldBe` True
+            1 `OSet.member` a `shouldBe` True
+            (-2) `OSet.member` a `shouldBe` True
+            2 `OSet.member` a `shouldBe` True
+            length a `shouldBe` 4
+            let b = OSet.map (+ 1) a
+            b `shouldBe` OSet.fromList [0, 2, -1, 3]
+            0 `OSet.member` b `shouldBe` True
+            2 `OSet.member` b `shouldBe` True
+            (-1) `OSet.member` b `shouldBe` True
+            3 `OSet.member` b `shouldBe` True
+            length b `shouldBe` 4
+        it "gloriously violates the functor laws" $ do
+            let a = OSet.fromList [-1, 1, -2, 2]
+            (-1) `OSet.member` a `shouldBe` True
+            1 `OSet.member` a `shouldBe` True
+            (-2) `OSet.member` a `shouldBe` True
+            2 `OSet.member` a `shouldBe` True
+            length a `shouldBe` 4
+            let b = OSet.map (\x -> x * x) a
+            b `shouldBe` OSet.fromList [1, 4]
+            1 `OSet.member` b `shouldBe` True
+            4 `OSet.member` b `shouldBe` True
+            length b `shouldBe` 2
