@@ -12,6 +12,17 @@ main = hspec $ do
             OSet.fromList [4, 3, 4, 1, 9] `shouldBe` OSet.fromList [4, 3, 1, 9]
             OSet.fromList [4, 3, 4, 1, 9] `shouldNotBe` OSet.fromList [3, 4, 1, 9]
 
+    describe "compare" $
+        it "compares as expected" $ do
+            let a = OSet.fromList [4, 3, 4, 1, 9]
+                b = OSet.fromList [4, 3, 1, 9]
+                c = OSet.fromList [4, 3, 1]
+            a `compare` b `shouldBe` EQ
+            a `compare` c `shouldBe` GT
+            b `compare` c `shouldBe` GT
+            c `compare` a `shouldBe` LT
+            c `compare` b `shouldBe` LT
+
     describe "show" $
         it "shows content in list syntax" $
             show (OSet.fromList [4, 3, 4, 1, 9]) `shouldBe` "fromList [4,3,1,9]"

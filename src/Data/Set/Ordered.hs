@@ -40,7 +40,7 @@ import           Prelude ((.), Bool, Eq, Ord, Show(..), not, otherwise)
 
 -- | An @OSet@ behaves much like a @Set@ but remembers the order in which the
 -- elements were originally inserted.
-data OSet a = OSet (Set a) (Seq a) deriving (Data, Eq)
+data OSet a = OSet (Set a) (Seq a) deriving (Data, Eq, Ord)
 
 instance Show a => Show (OSet a) where
     show (OSet _ xsSeq) = show xsSeq
