@@ -27,6 +27,7 @@ module Data.Set.Ordered
     , fromList
     , member
     , notMember
+    , singleton
     ) where
 
 import           Data.Data (Data)
@@ -35,9 +36,21 @@ import           Data.Maybe (Maybe(..))
 import           Data.Monoid (Monoid(..))
 import           Data.Semigroup (Semigroup(..))
 import           Data.Sequence (Seq)
-import qualified Data.Sequence as Seq ((|>), (<|), deleteAt, elemIndexL, empty)
+import qualified Data.Sequence as Seq
+                    ( (|>)
+                    , (<|)
+                    , deleteAt
+                    , elemIndexL
+                    , empty
+                    , singleton
+                    )
 import           Data.Set (Set)
-import qualified Data.Set as Set (empty, insert, member)
+import qualified Data.Set as Set
+                    ( empty
+                    , insert
+                    , member
+                    , singleton
+                    )
 import           Prelude ((.), Bool, Eq, Ord, Show(..), not, otherwise)
 
 -- | An @OSet@ behaves much like a @Set@ but remembers the order in which the
@@ -97,8 +110,15 @@ fromList :: Ord a
 fromList = foldl' (|>) empty
 
 -- | \(O(1)\). The empty set.
-empty :: OSet a
+empty ::
+    OSet a      -- ^ set
 empty = OSet Set.empty Seq.empty
+
+-- | \(O(1)\). A singleton set containing the given element.
+singleton ::
+    a           -- ^ element
+    -> OSet a   -- ^ set
+singleton x = OSet (Set.singleton x) (Seq.singleton x)
 
 -- | \(O(log(N))\). Determine if the element is in the set.
 member :: Ord a

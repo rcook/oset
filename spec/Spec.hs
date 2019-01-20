@@ -81,3 +81,12 @@ main = hspec $ do
             5 |< OSet.fromList  [4, 1, 3, 9, 1] `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
         it "prefers matching element already in set" $
             9 |< OSet.fromList  [4, 1, 3, 9, 1] `shouldBe` OSet.fromList [9, 4, 1, 3]
+
+    describe "singleton" $
+        it "contains one element" $ do
+            let o = OSet.singleton 5
+            o `shouldBe` OSet.fromList [5]
+            5 `OSet.member` o `shouldBe` True
+            5 `OSet.notMember` o `shouldBe` False
+            6 `OSet.member` o `shouldBe` False
+            6 `OSet.notMember` o `shouldBe` True
