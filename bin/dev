@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+this_dir=$(cd $(dirname $0); pwd -P)
+repo_dir=$(dirname $this_dir)
+
+cd $repo_dir
+
+stack build --copy-compiler-tool ghcid
+
+stack build --copy-compiler-tool hlint
+
+stack build intero

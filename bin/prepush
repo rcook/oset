@@ -1,0 +1,63 @@
+#!/bin/bash
+set -euo pipefail
+
+report_info() {
+  echo -e "\033[1;33m$1\033[0m"
+}
+
+report_success() {
+  echo -e "\033[1;32m$1\033[0m"
+}
+
+report_error() {
+  echo -e "\033[1;31m$1\033[0m"
+}
+
+run() {
+  report_info "Pre-push step $*"
+  set +e
+  $*
+  run_status=$?
+  set -e
+  [ $run_status -eq 0 ] \
+    && report_success "Pre-push step $* succeeded" \
+    || report_error "Pre-push step $* failed"
+  true
+}
+
+run_fail_fast() {
+  run $*
+  [ $run_status -eq 0 ]
+}
+
+this_dir=$(cd $(dirname $0); pwd -P)
+repo_dir=$(dirname $this_dir)
+hlint_report_path=$repo_dir/.stack-work/report.html
+
+cd $repo_dir
+
+run stack exec hlint -- . --extension=hs --report=$hlint_report_path
+if [ $run_status -ne 0 ]; then
+  if [ -f $hlint_report_path ]; then
+    if hash xxdg-open 2>/dev/null; then
+      xdg-open $hlint_report_path
+    elif hash xgnome-open 2>/dev/null; then
+      gnome-open $hlint_report_path
+    elif hash xopen 2>/dev/null; then
+      open $hlint_report_path
+    else
+      report_info "View hlint report at $hlint_report_path"
+    fi
+  fi
+  exit 1
+fi
+
+run_fail_fast stack clean
+
+run_fail_fast stack build --pedantic
+
+run_fail_fast stack test
+
+run_fail_fast stack haddock
+
+report_success "All pre-push steps succeeded"

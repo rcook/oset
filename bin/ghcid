@@ -1,0 +1,32 @@
+#!/bin/bash
+set -euo pipefail
+
+this_dir=$(cd $(dirname $0); pwd -P)
+repo_dir=$(dirname $this_dir)
+
+cd $repo_dir
+
+if [ $# -eq 1 ]; then
+  if [ -f $1 ]; then
+    temp_path=$(mktemp)
+    cat << EOF > $temp_path
+:set -fno-warn-missing-home-modules
+:load $1
+EOF
+    stack exec \
+      ghcid -- \
+      -T':main' \
+      --command "stack ghci --ghci-options -ghci-script=$temp_path"
+  else
+    temp_path=$(mktemp)
+    cat << EOF > $temp_path
+:set -fno-warn-missing-home-modules
+EOF
+    stack exec \
+      ghcid -- \
+      -T':main' \
+      --command "stack ghci $1"
+  fi
+else
+  stack exec ghcid
+fi
