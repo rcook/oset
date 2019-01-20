@@ -1,7 +1,7 @@
 module Main (main) where
 
 import           Data.Foldable (toList)
-import           Data.Set.Ordered (OSet)
+import           Data.Set.Ordered ((|>), (|<), OSet)
 import qualified Data.Set.Ordered as OSet
 import           Test.Hspec
 
@@ -69,3 +69,15 @@ main = hspec $ do
             1 `elem` OSet.fromList [1, 2, 3] `shouldBe` True
         it "handle element not in set" $
             10 `elem` OSet.fromList [1, 2, 3] `shouldBe` False
+
+    describe "insertion with <|" $ do
+        it "appends new element" $
+            OSet.fromList  [4, 1, 3, 9, 1] |> 5 `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
+        it "prefers matching element already in set" $
+            OSet.fromList  [4, 1, 3, 9, 1] |> 4 `shouldBe` OSet.fromList [4, 1, 3, 9]
+
+    describe "insertion with |<" $ do
+        it "conses new element" $
+            5 |< OSet.fromList  [4, 1, 3, 9, 1] `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
+        it "prefers matching element already in set" $
+            9 |< OSet.fromList  [4, 1, 3, 9, 1] `shouldBe` OSet.fromList [9, 4, 1, 3]
