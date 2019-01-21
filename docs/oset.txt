@@ -17,6 +17,41 @@
 --   
 --   This is intended to be API-compatible with <a>OSet</a> in
 --   <a>unordered-containers</a> but with a few extra type class instances.
+--   
+--   Here's the quick-start guide to using this package:
+--   
+--   <pre>
+--   module Main (main) where
+--   
+--   import           Data.Set.Ordered ((|&gt;), (|&lt;), OSet)
+--   import qualified Data.Set.Ordered as OSet
+--   
+--   main :: IO ()
+--   main = do
+--       -- Create from list
+--       let s0 = OSet.fromList [1, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
+--       print s0 -- outputs: "fromList [1,2,3,4,-1,-2,-3]"
+--   
+--       -- Append
+--       let s1 = s0 |&gt; 4
+--       print s1 -- outputs: "fromList [1,2,3,4,-1,-2,-3]"
+--   
+--       -- Prepend
+--       let s2 = 4 |&lt; s0
+--       print s2 -- outputs: "fromList [4,1,2,3,-1,-2,-3]"
+--   
+--       -- Semigroup
+--       let s3 = s0 &lt;&gt; OSet.fromList [10, 10, 20, 20, 30, 30]
+--       print s3 -- outputs: "fromList [1,2,3,4,-1,-2,-3,10,20,30]"
+--   
+--       -- Map (but note that OSet is not a functor)
+--       let s4 = OSet.map (\x -&gt; x * x) s3
+--       print s4 -- outputs: "fromList [1,4,9,16,100,400,900]"
+--   
+--       -- Filter
+--       let s5 = OSet.filter (&gt;= 100) s4
+--       print s5 -- outputs: "fromList [100,400,900]"
+--   </pre>
 module Data.Set.Ordered
 
 -- | &lt;math&gt;. Append an element to the end of set if the set does not
