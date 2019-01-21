@@ -9,6 +9,10 @@ An insert-order-preserving set
 * Implements subset of `OSet` API from [`ordered-containers`][ordered-containers] but is otherwise API-compatible with it
 * Adds useful instances for `Semigroup`, `Monoid`, `Data`
 
+## Documentation
+
+[View documentation][docs]
+
 ## Build and test
 
 ```bash
@@ -20,4 +24,5 @@ stack build --test
 
 [MIT License](LICENSE)
 
+[docs]: http://rcook.github.io/oset
 [ordered-containers]: http://hackage.haskell.org/package/ordered-containers-0.1.1

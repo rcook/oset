@@ -1,0 +1,49 @@
+#!/bin/bash
+set -euo pipefail
+
+report_success() {
+  echo -e "\033[1;32m$1\033[0m"
+}
+
+this_dir=$(cd $(dirname $0); pwd -P)
+repo_dir=$(dirname $this_dir)
+
+cd $repo_dir
+doc_root=$(stack path --local-doc-root)
+
+cd $repo_dir
+file_names=(*.cabal)
+cabal_file=$repo_dir/${file_names[0]}
+
+package_name=$(
+  cat $cabal_file |
+    grep '^name:' |
+    head -n1 |
+    sed -e 's/^name: *\(.*\)$/\1/g'
+)
+version=$(
+  cat $cabal_file |
+    grep '^version:' |
+    head -n1 |
+    sed -e 's/^version: *\(.*\)$/\1/g'
+)
+
+stack haddock
+
+#zip_file=$(mktemp -d)/$package_name-$version-haddocks.zip
+#cd $doc_root/$package_name-$version
+#zip -o $zip_file -r .
+#echo "Generated $zip_file"
+
+docs_dir=$repo_dir/docs
+
+set +e
+git rm -rf $docs_dir > /dev/null 2>&1
+set -e
+
+mkdir -p $docs_dir
+mv $doc_root/$package_name-$version/* $docs_dir
+git add $docs_dir
+
+report_success "Documentation successfully updated at $docs_dir"
+git status
