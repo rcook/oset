@@ -14,6 +14,40 @@ function.
 This is intended to be API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html OSet>
 in <http://hackage.haskell.org/package/ordered-containers-0.1.1 unordered-containers>
 but with a few extra type class instances.
+
+Here's the quick-start guide to using this package:
+
+> module Main (main) where
+>
+> import           Data.Set.Ordered ((|>), (|<), OSet)
+> import qualified Data.Set.Ordered as OSet
+>
+> main :: IO ()
+> main = do
+>     -- Create from list
+>     let s0 = OSet.fromList [1, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
+>     print s0 -- outputs: "fromList [1,2,3,4,-1,-2,-3]"
+>
+>     -- Append
+>     let s1 = s0 |> 4
+>     print s1 -- outputs: "fromList [1,2,3,4,-1,-2,-3]"
+>
+>     -- Prepend
+>     let s2 = 4 |< s0
+>     print s2 -- outputs: "fromList [4,1,2,3,-1,-2,-3]"
+>
+>     -- Semigroup
+>     let s3 = s0 <> OSet.fromList [10, 10, 20, 20, 30, 30]
+>     print s3 -- outputs: "fromList [1,2,3,4,-1,-2,-3,10,20,30]"
+>
+>     -- Map (but note that OSet is not a functor)
+>     let s4 = OSet.map (\x -> x * x) s3
+>     print s4 -- outputs: "fromList [1,4,9,16,100,400,900]"
+>
+>     -- Filter
+>     let s5 = OSet.filter (>= 100) s4
+>     print s5 -- outputs: "fromList [100,400,900]"
+
 -}
 
 {-# LANGUAGE DeriveDataTypeable #-}
