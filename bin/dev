@@ -10,4 +10,4 @@ stack build --copy-compiler-tool ghcid
 
 stack build --copy-compiler-tool hlint
 
-stack build intero
+stack build --copy-compiler-tool intero
