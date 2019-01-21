@@ -39,11 +39,11 @@ cd $repo_dir
 run stack exec hlint -- . --extension=hs --report=$hlint_report_path
 if [ $run_status -ne 0 ]; then
   if [ -f $hlint_report_path ]; then
-    if hash xxdg-open 2>/dev/null; then
+    if hash xdg-open 2>/dev/null; then
       xdg-open $hlint_report_path
-    elif hash xgnome-open 2>/dev/null; then
+    elif hash gnome-open 2>/dev/null; then
       gnome-open $hlint_report_path
-    elif hash xopen 2>/dev/null; then
+    elif hash open 2>/dev/null; then
       open $hlint_report_path
     else
       report_info "View hlint report at $hlint_report_path"
