@@ -4,7 +4,7 @@
 
 # oset
 
-An insert-order-preserving set
+An insertion-order-preserving set
 
 * Implements subset of `OSet` API from [`ordered-containers`][ordered-containers] but is otherwise API-compatible with it
 * Adds useful instances for `Semigroup`, `Monoid`, `Data`

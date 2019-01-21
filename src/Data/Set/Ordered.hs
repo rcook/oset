@@ -1,13 +1,13 @@
 {-|
 Module      : Data.Set.Ordered
-Description : Provides an insert-order-preserving set
+Description : Provides an insertion-order-preserving set
 Copyright   : (C) Richard Cook, 2019
 Licence     : MIT
 Maintainer  : rcook@rcook.org
 Stability   : stable
 Portability : portable
 
-This module provides @OSet@, an insert-order-preserving set, with type class
+This module provides @OSet@, an insertion-order-preserving set, with type class
 instances for @Foldable@, @Semigroup@, @Monoid@ and @Data@ as well as a @map@
 function.
 
@@ -106,7 +106,7 @@ infixr 5 |<
 
 -- | \(O(N log(N))\). Create a set from a finite list of elements. If an element
 -- occurs multiple times in the original list, only the first occurrence is
--- retained in the resulting set. The function 'toList' (\(O(N)\) in 'Foldable'
+-- retained in the resulting set. The function 'toList', \(O(N)\), in 'Foldable'
 -- can be used to return a list of the elements in the original insert order
 -- with duplicates removed.
 fromList :: Ord a
@@ -147,9 +147,9 @@ filter :: (a -> Bool)  -- ^ predicate
 filter p (OSet xsSet xsSeq) = OSet (Set.filter p xsSet) (Seq.filter p xsSeq)
 
 -- | \(O(N log(N))\). Return the set obtained by applying a function to each
--- element of this set. Note that size of the resulting set may be smaller than
--- the original. This fact, along with the @Ord@ constraint, mean that @OSet@
--- cannot provide a lawful @Functor@ instance.
+-- element of this set. Note that the resulting set may be smaller than the
+-- original. Along with the @Ord@ constraint, this means that @OSet@ cannot
+-- provide a lawful @Functor@ instance.
 map :: Ord b
     => (a -> b)
     -> OSet a
