@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">{-|
 Module      : Data.Set.Ordered
-Description : Provides an insert-order-preserving set
+Description : Provides an insertion-order-preserving set
 Copyright   : (C) Richard Cook, 2019
 Licence     : MIT
 Maintainer  : rcook@rcook.org
 Stability   : stable
 Portability : portable
 
-This module provides @OSet@, an insert-order-preserving set, with type class
+This module provides @OSet@, an insertion-order-preserving set, with type class
 instances for @Foldable@, @Semigroup@, @Monoid@ and @Data@ as well as a @map@
 function.
 
@@ -106,7 +106,7 @@ but with a few extra type class instances.
 </span><a name="line-106"></a><span>
 </span><a name="line-107"></a><span class="hs-comment">-- | \(O(N log(N))\). Create a set from a finite list of elements. If an element</span><span>
 </span><a name="line-108"></a><span class="hs-comment">-- occurs multiple times in the original list, only the first occurrence is</span><span>
-</span><a name="line-109"></a><span class="hs-comment">-- retained in the resulting set. The function 'toList' (\(O(N)\) in 'Foldable'</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- retained in the resulting set. The function 'toList', \(O(N)\), in 'Foldable'</span><span>
 </span><a name="line-110"></a><span class="hs-comment">-- can be used to return a list of the elements in the original insert order</span><span>
 </span><a name="line-111"></a><span class="hs-comment">-- with duplicates removed.</span><span>
 </span><a name="line-112"></a><span class="hs-identifier">fromList</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Ord</span><span> </span><a href="#local-6989586621679034122"><span class="hs-identifier hs-type">a</span></a><span>
@@ -147,9 +147,9 @@ but with a few extra type class instances.
 </span><a name="line-147"></a><a name="filter"><a href="Data.Set.Ordered.html#filter"><span class="hs-identifier">filter</span></a></a><span> </span><a name="local-6989586621679034177"><a href="#local-6989586621679034177"><span class="hs-identifier">p</span></a></a><span> </span><span class="hs-special">(</span><a href="Data.Set.Ordered.html#OSet"><span class="hs-identifier hs-var">OSet</span></a><span> </span><a name="local-6989586621679034178"><a href="#local-6989586621679034178"><span class="hs-identifier">xsSet</span></a></a><span> </span><a name="local-6989586621679034179"><a href="#local-6989586621679034179"><span class="hs-identifier">xsSeq</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Set.Ordered.html#OSet"><span class="hs-identifier hs-var">OSet</span></a><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">Set.filter</span><span> </span><a href="#local-6989586621679034177"><span class="hs-identifier hs-var">p</span></a><span> </span><a href="#local-6989586621679034178"><span class="hs-identifier hs-var">xsSet</span></a><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">Seq.filter</span><span> </span><a href="#local-6989586621679034177"><span class="hs-identifier hs-var">p</span></a><span> </span><a href="#local-6989586621679034179"><span class="hs-identifier hs-var">xsSeq</span></a><span class="hs-special">)</span><span>
 </span><a name="line-148"></a><span>
 </span><a name="line-149"></a><span class="hs-comment">-- | \(O(N log(N))\). Return the set obtained by applying a function to each</span><span>
-</span><a name="line-150"></a><span class="hs-comment">-- element of this set. Note that size of the resulting set may be smaller than</span><span>
-</span><a name="line-151"></a><span class="hs-comment">-- the original. This fact, along with the @Ord@ constraint, mean that @OSet@</span><span>
-</span><a name="line-152"></a><span class="hs-comment">-- cannot provide a lawful @Functor@ instance.</span><span>
+</span><a name="line-150"></a><span class="hs-comment">-- element of this set. Note that the resulting set may be smaller than the</span><span>
+</span><a name="line-151"></a><span class="hs-comment">-- original. Along with the @Ord@ constraint, this means that @OSet@ cannot</span><span>
+</span><a name="line-152"></a><span class="hs-comment">-- provide a lawful @Functor@ instance.</span><span>
 </span><a name="line-153"></a><span class="hs-identifier">map</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Ord</span><span> </span><a href="#local-6989586621679032287"><span class="hs-identifier hs-type">b</span></a><span>
 </span><a name="line-154"></a><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679032288"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679032287"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span>
 </span><a name="line-155"></a><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Set.Ordered.html#OSet"><span class="hs-identifier hs-type">OSet</span></a><span> </span><a href="#local-6989586621679032288"><span class="hs-identifier hs-type">a</span></a><span>

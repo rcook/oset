@@ -2,16 +2,16 @@
 -- See Hoogle, http://www.haskell.org/hoogle/
 
 
--- | An insert-order-preserving set
+-- | An insertion-order-preserving set
 --   
---   This package provides <tt>OSet</tt>, an insert-order-preserving set,
---   with type class instances for <tt>Foldable</tt>, <tt>Semigroup</tt>,
---   <tt>Monoid</tt> and <tt>Data</tt>.
+--   This package provides <tt>OSet</tt>, an insertion-order-preserving
+--   set, with type class instances for <tt>Foldable</tt>,
+--   <tt>Semigroup</tt>, <tt>Monoid</tt> and <tt>Data</tt>.
 @package oset
 @version 0.1.0.0
 
 
--- | This module provides <tt>OSet</tt>, an insert-order-preserving set,
+-- | This module provides <tt>OSet</tt>, an insertion-order-preserving set,
 --   with type class instances for <tt>Foldable</tt>, <tt>Semigroup</tt>,
 --   <tt>Monoid</tt> and <tt>Data</tt> as well as a <tt>map</tt> function.
 --   
@@ -47,15 +47,15 @@ filter :: (a -> Bool) -> OSet a -> OSet a
 -- | &lt;math&gt;. Create a set from a finite list of elements. If an
 --   element occurs multiple times in the original list, only the first
 --   occurrence is retained in the resulting set. The function
---   <a>toList</a> ((O(N)) in <a>Foldable</a> can be used to return a list
---   of the elements in the original insert order with duplicates removed.
+--   <a>toList</a>, &lt;math&gt;, in <a>Foldable</a> can be used to return
+--   a list of the elements in the original insert order with duplicates
+--   removed.
 fromList :: Ord a => [a] -> OSet a
 
 -- | &lt;math&gt;. Return the set obtained by applying a function to each
---   element of this set. Note that size of the resulting set may be
---   smaller than the original. This fact, along with the <tt>Ord</tt>
---   constraint, mean that <tt>OSet</tt> cannot provide a lawful
---   <tt>Functor</tt> instance.
+--   element of this set. Note that the resulting set may be smaller than
+--   the original. Along with the <tt>Ord</tt> constraint, this means that
+--   <tt>OSet</tt> cannot provide a lawful <tt>Functor</tt> instance.
 map :: Ord b => (a -> b) -> OSet a -> OSet b
 
 -- | &lt;math&gt;. Determine if the element is in the set.
