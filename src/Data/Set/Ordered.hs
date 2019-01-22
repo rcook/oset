@@ -52,7 +52,7 @@ Here's the quick-start guide to using this package:
 
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE NoImplicitPrelude #-}
-{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wall -Werror #-}
 
 module Data.Set.Ordered
     ( (|>)

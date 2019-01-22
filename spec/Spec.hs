@@ -1,4 +1,5 @@
 {-# LANGUAGE ViewPatterns #-}
+{-# OPTIONS_GHC -Wall -Werror #-}
 
 module Main (main) where
 
@@ -13,12 +14,14 @@ main :: IO ()
 main = hspec $ do
     describe "equals" $
         it "compares as expected" $ do
-            OSet.fromList [4, 3, 4, 1, 9] `shouldBe` OSet.fromList [4, 3, 1, 9]
-            OSet.fromList [4, 3, 4, 1, 9] `shouldNotBe` OSet.fromList [3, 4, 1, 9]
+            OSet.fromList [4 :: Int, 3, 4, 1, 9]
+                `shouldBe` OSet.fromList [4, 3, 1, 9]
+            OSet.fromList [4 :: Int, 3, 4, 1, 9]
+                `shouldNotBe` OSet.fromList [3, 4, 1, 9]
 
     describe "compare" $
         it "compares as expected" $ do
-            let a = OSet.fromList [4, 3, 4, 1, 9]
+            let a = OSet.fromList [4 :: Int, 3, 4, 1, 9]
                 b = OSet.fromList [4, 3, 1, 9]
                 c = OSet.fromList [4, 3, 1]
             a `compare` b `shouldBe` EQ
@@ -29,11 +32,13 @@ main = hspec $ do
 
     describe "show" $
         it "shows content in list syntax" $
-            show (OSet.fromList [4, 3, 4, 1, 9]) `shouldBe` "fromList [4,3,1,9]"
+            show (OSet.fromList [4 :: Int, 3, 4, 1, 9])
+                `shouldBe` "fromList [4,3,1,9]"
 
     describe "fromList" $
         it "removes duplicates" $
-            toList (OSet.fromList [4, 3, 4, 1, 9]) `shouldBe` [4, 3, 1, 9]
+            toList (OSet.fromList [4 :: Int, 3, 4, 1, 9])
+                `shouldBe` [4, 3, 1, 9]
 
     describe "empty" $
         it "contains no values" $
@@ -41,10 +46,11 @@ main = hspec $ do
 
     describe "mappend" $ do
         it "removes duplicates" $
-            toList (OSet.fromList [4, 3, 4, 1, 9] <> OSet.fromList [9, 8..0])
+            toList (OSet.fromList [4 :: Int, 3, 4, 1, 9]
+                <> OSet.fromList [9, 8..0])
                 `shouldBe` [4, 3, 1, 9, 8, 7, 6, 5, 2, 0]
         it "is associative" $ do
-            let a = OSet.fromList [4, 3, 4, 1, 9]
+            let a = OSet.fromList [4 :: Int, 3, 4, 1, 9]
                 b = OSet.fromList [9, 8..0]
                 c = OSet.fromList [-1, 10]
                 result = OSet.fromList [4, 3, 1, 9, 8, 7, 6, 5, 2, 0, -1, 10]
@@ -56,39 +62,43 @@ main = hspec $ do
         it "contains no values" $
             toList (mempty :: OSet Int) `shouldBe` ([] :: [Int])
         it "is neutral element" $ do
-            let a = OSet.fromList [4, 3, 4, 1, 9]
+            let a = OSet.fromList [4 :: Int, 3, 4, 1, 9]
             mempty <> a `shouldBe` a
             a <> mempty `shouldBe` a
 
     describe "member and notMember" $ do
         it "handle element in set" $ do
-            1 `OSet.member` OSet.fromList [1, 2, 3] `shouldBe` True
-            1 `OSet.notMember` OSet.fromList [1, 2, 3] `shouldBe` False
+            (1 :: Int) `OSet.member` OSet.fromList [1, 2, 3] `shouldBe` True
+            (1 :: Int) `OSet.notMember` OSet.fromList [1, 2, 3] `shouldBe` False
         it "handle element not in set" $ do
-            10 `OSet.member` OSet.fromList [1, 2, 3] `shouldBe` False
-            10 `OSet.notMember` OSet.fromList [1, 2, 3] `shouldBe` True
+            (10 :: Int) `OSet.member` OSet.fromList [1, 2, 3] `shouldBe` False
+            (10 :: Int) `OSet.notMember` OSet.fromList [1, 2, 3] `shouldBe` True
 
     describe "elem" $ do
         it "handle element in set" $
-            1 `elem` OSet.fromList [1, 2, 3] `shouldBe` True
+            (1 :: Int) `elem` OSet.fromList [1, 2, 3] `shouldBe` True
         it "handle element not in set" $
-            10 `elem` OSet.fromList [1, 2, 3] `shouldBe` False
+            (10 :: Int) `elem` OSet.fromList [1, 2, 3] `shouldBe` False
 
     describe "insertion with <|" $ do
         it "appends new element" $
-            OSet.fromList  [4, 1, 3, 9, 1] |> 5 `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
+            OSet.fromList  [4 :: Int, 1, 3, 9, 1] |> 5
+                `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
         it "prefers matching element already in set" $
-            OSet.fromList  [4, 1, 3, 9, 1] |> 4 `shouldBe` OSet.fromList [4, 1, 3, 9]
+            OSet.fromList  [4 :: Int, 1, 3, 9, 1] |> 4
+                `shouldBe` OSet.fromList [4, 1, 3, 9]
 
     describe "insertion with |<" $ do
         it "conses new element" $
-            5 |< OSet.fromList  [4, 1, 3, 9, 1] `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
+            (5 :: Int) |< OSet.fromList  [4, 1, 3, 9, 1]
+                `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
         it "prefers matching element already in set" $
-            9 |< OSet.fromList  [4, 1, 3, 9, 1] `shouldBe` OSet.fromList [9, 4, 1, 3]
+            (9 :: Int) |< OSet.fromList  [4, 1, 3, 9, 1]
+                `shouldBe` OSet.fromList [9, 4, 1, 3]
 
     describe "singleton" $
         it "contains one element" $ do
-            let o = OSet.singleton 5
+            let o = OSet.singleton (5 :: Int)
             o `shouldBe` OSet.fromList [5]
             5 `OSet.member` o `shouldBe` True
             5 `OSet.notMember` o `shouldBe` False
@@ -97,7 +107,7 @@ main = hspec $ do
 
     describe "filter" $
         it "removes all even elements" $ do
-            let a = OSet.fromList [1, 2, 3, 4]
+            let a = OSet.fromList [1 :: Int, 2, 3, 4]
             1 `OSet.member` a `shouldBe` True
             2 `OSet.member` a `shouldBe` True
             3 `OSet.member` a `shouldBe` True
@@ -113,7 +123,7 @@ main = hspec $ do
 
     describe "map" $ do
         it "transforms elements" $ do
-            let a = OSet.fromList [-1, 1, -2, 2]
+            let a = OSet.fromList [-1 :: Int, 1, -2, 2]
             (-1) `OSet.member` a `shouldBe` True
             1 `OSet.member` a `shouldBe` True
             (-2) `OSet.member` a `shouldBe` True
@@ -127,7 +137,7 @@ main = hspec $ do
             3 `OSet.member` b `shouldBe` True
             length b `shouldBe` 4
         it "gloriously violates the functor laws" $ do
-            let a = OSet.fromList [-1, 1, -2, 2]
+            let a = OSet.fromList [-1 :: Int, 1, -2, 2]
             (-1) `OSet.member` a `shouldBe` True
             1 `OSet.member` a `shouldBe` True
             (-2) `OSet.member` a `shouldBe` True
