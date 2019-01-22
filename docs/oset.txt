@@ -11,9 +11,9 @@
 @version 0.1.0.0
 
 
--- | This module provides <tt>OSet</tt>, an insertion-order-preserving set,
---   with type class instances for <tt>Foldable</tt>, <tt>Semigroup</tt>,
---   <tt>Monoid</tt> and <tt>Data</tt> as well as a <tt>map</tt> function.
+-- | This module provides <a>OSet</a>, an insertion-order-preserving set,
+--   with type class instances for <a>Foldable</a>, <a>Semigroup</a>,
+--   <a>Monoid</a> and <a>Data</a> as well as a <a>map</a> function.
 --   
 --   This is intended to be API-compatible with <a>OSet</a> in
 --   <a>unordered-containers</a> but with a few extra type class instances.
@@ -23,13 +23,13 @@
 --   <pre>
 --   module Main (main) where
 --   
---   import           Data.Set.Ordered ((|&gt;), (|&lt;), OSet)
+--   import           Data.Set.Ordered ((|&gt;), (|&lt;))
 --   import qualified Data.Set.Ordered as OSet
 --   
 --   main :: IO ()
 --   main = do
 --       -- Create from list
---       let s0 = OSet.fromList [1, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
+--       let s0 = OSet.fromList [1 :: Int, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
 --       print s0 -- outputs: "fromList [1,2,3,4,-1,-2,-3]"
 --   
 --       -- Append
@@ -52,6 +52,33 @@
 --       let s5 = OSet.filter (&gt;= 100) s4
 --       print s5 -- outputs: "fromList [100,400,900]"
 --   </pre>
+--   
+--   There are cases where the developer's natural instinct would be to
+--   convert the <a>OSet</a> instance to a list using <a>toList</a> from
+--   <a>Foldable</a>. While this is possible, it will often be more
+--   efficient to use <a>toSeq</a> and operate on the sequence that way.
+--   You can even use view patterns to pattern-match on the resulting
+--   sequence:
+--   
+--   <pre>
+--   module Main (main) where
+--   
+--   import           Data.Sequence (ViewL(..), viewl)
+--   import           Data.Set.Ordered (OSet)
+--   import qualified Data.Set.Ordered as OSet
+--   
+--   showFromLeft :: Show a =&gt; OSet a -&gt; String
+--   showFromLeft o = go (OSet.toSeq o)
+--       where
+--           go (viewl -&gt; EmptyL) = ""
+--           go (viewl -&gt; h :&lt; t) = show h ++ go t
+--           go _ = error "Should not happen" -- suppress warning about non-exhaustive patterns
+--   
+--   main :: IO ()
+--   main = do
+--       let a = OSet.fromList [4 :: Int, 1, 3, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+--       print $ showFromLeft a -- outputs: "4139025678"
+--   </pre>
 module Data.Set.Ordered
 
 -- | &lt;math&gt;. Append an element to the end of set if the set does not
@@ -68,8 +95,8 @@ infixl 5 |>
 (|<) :: Ord a => a -> OSet a -> OSet a
 infixr 5 |<
 
--- | An <tt>OSet</tt> behaves much like a <tt>Set</tt> but remembers the
---   order in which the elements were originally inserted.
+-- | An <a>OSet</a> behaves much like a <a>Set</a> but remembers the order
+--   in which the elements were originally inserted.
 data OSet a
 
 -- | &lt;math&gt;. The empty set.
@@ -89,8 +116,8 @@ fromList :: Ord a => [a] -> OSet a
 
 -- | &lt;math&gt;. Return the set obtained by applying a function to each
 --   element of this set. Note that the resulting set may be smaller than
---   the original. Along with the <tt>Ord</tt> constraint, this means that
---   <tt>OSet</tt> cannot provide a lawful <tt>Functor</tt> instance.
+--   the original. Along with the <a>Ord</a> constraint, this means that
+--   <a>OSet</a> cannot provide a lawful <tt>Functor</tt> instance.
 map :: Ord b => (a -> b) -> OSet a -> OSet b
 
 -- | &lt;math&gt;. Determine if the element is in the set.
@@ -101,6 +128,13 @@ notMember :: Ord a => a -> OSet a -> Bool
 
 -- | &lt;math&gt;. A singleton set containing the given element.
 singleton :: a -> OSet a
+
+-- | &lt;math&gt;. Return ordered sequence of elements in set. For
+--   obtaining a useful <tt>Functor</tt> this is recommended over
+--   <a>toList</a> due to its constant-time performance. Similarly, if you
+--   want to pattern-match on the <a>OSet</a>, obtain the sequence and use
+--   view patterns instead of converting to a list.
+toSeq :: OSet a -> Seq a
 instance GHC.Classes.Ord a => GHC.Classes.Ord (Data.Set.Ordered.OSet a)
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Data.Set.Ordered.OSet a)
 instance (Data.Data.Data a, GHC.Classes.Ord a) => Data.Data.Data (Data.Set.Ordered.OSet a)
