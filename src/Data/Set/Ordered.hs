@@ -65,6 +65,7 @@ module Data.Set.Ordered
     , member
     , notMember
     , singleton
+    , toSeq
     ) where
 
 import           Data.Data (Data)
@@ -189,3 +190,11 @@ map :: Ord b
     -> OSet a
     -> OSet b
 map f (OSet _ xsSeq) = foldl' (|>) empty (f <$> xsSeq)
+
+-- | \(O(1)\). Return ordered sequence of elements in set. For obtaining
+-- a useful 'Functor' this is recommended over 'toList' due to its
+-- constant-time performance. Similarly, if you want to pattern-match on
+-- the 'OSet', obtain the sequence and use view patterns instead of
+-- converting to a list.
+toSeq :: OSet a -> Seq a
+toSeq (OSet _ xsSeq) = xsSeq

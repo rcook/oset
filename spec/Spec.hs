@@ -1,6 +1,10 @@
+{-# LANGUAGE ViewPatterns #-}
+
 module Main (main) where
 
 import           Data.Foldable (toList)
+import           Data.Sequence (ViewL(..), ViewR(..))
+import qualified Data.Sequence as Seq (fromList, viewl, viewr)
 import           Data.Set.Ordered ((|>), (|<), OSet)
 import qualified Data.Set.Ordered as OSet
 import           Test.Hspec
@@ -134,3 +138,24 @@ main = hspec $ do
             1 `OSet.member` b `shouldBe` True
             4 `OSet.member` b `shouldBe` True
             length b `shouldBe` 2
+
+    describe "toSeq" $ do
+        let a = OSet.fromList [4 :: Int, 1, 3, 9, 9, 3, 1, 4]
+        it "provides Functor instance" $
+            show <$> OSet.toSeq a `shouldBe` Seq.fromList ["4", "1", "3", "9"]
+        it "provides viewl" $ do
+            let fromLeft o = go (OSet.toSeq o)
+                    where
+                        go (Seq.viewl -> EmptyL) = ""
+                        go (Seq.viewl -> head_ :< tail_) = show head_ ++ go tail_
+                        go _ = error "Should not happen" -- suppress warning about non-exhaustive patterns
+            fromLeft (OSet.empty :: OSet Int) `shouldBe` ""
+            fromLeft a `shouldBe` "4139"
+        it "provides viewr" $ do
+            let fromRight o = go (OSet.toSeq o)
+                    where
+                        go (Seq.viewr -> EmptyR) = ""
+                        go (Seq.viewr -> init_ :> last_) = show last_ ++ go init_
+                        go _ = error "Should not happen" -- suppress warning about non-exhaustive patterns
+            fromRight (OSet.empty :: OSet Int) `shouldBe` ""
+            fromRight a `shouldBe` "9314"
