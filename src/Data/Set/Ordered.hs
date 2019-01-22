@@ -7,9 +7,9 @@ Maintainer  : rcook@rcook.org
 Stability   : stable
 Portability : portable
 
-This module provides @OSet@, an insertion-order-preserving set, with type class
-instances for @Foldable@, @Semigroup@, @Monoid@ and @Data@ as well as a @map@
-function.
+This module provides 'OSet', an insertion-order-preserving set, with
+type class instances for 'Foldable', 'Semigroup', 'Monoid' and 'Data' as
+well as a 'map' function.
 
 This is intended to be API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html OSet>
 in <http://hackage.haskell.org/package/ordered-containers-0.1.1 unordered-containers>
@@ -19,13 +19,13 @@ Here's the quick-start guide to using this package:
 
 > module Main (main) where
 >
-> import           Data.Set.Ordered ((|>), (|<), OSet)
+> import           Data.Set.Ordered ((|>), (|<))
 > import qualified Data.Set.Ordered as OSet
 >
 > main :: IO ()
 > main = do
 >     -- Create from list
->     let s0 = OSet.fromList [1, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
+>     let s0 = OSet.fromList [1 :: Int, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
 >     print s0 -- outputs: "fromList [1,2,3,4,-1,-2,-3]"
 >
 >     -- Append
@@ -48,6 +48,31 @@ Here's the quick-start guide to using this package:
 >     let s5 = OSet.filter (>= 100) s4
 >     print s5 -- outputs: "fromList [100,400,900]"
 
+There are cases where the developer's natural instinct would be to
+convert the 'OSet' instance to a list using 'toList' from 'Foldable'.
+While this is possible, it will often be more efficient to use 'toSeq'
+and operate on the sequence that way. You can even use view patterns to
+pattern-match on the resulting sequence:
+
+> {-# LANGUAGE ViewPatterns #-}
+>
+> module Main (main) where
+>
+> import           Data.Sequence (ViewL(..), viewl)
+> import           Data.Set.Ordered (OSet)
+> import qualified Data.Set.Ordered as OSet
+>
+> showFromLeft :: Show a => OSet a -> String
+> showFromLeft o = go (OSet.toSeq o)
+>     where
+>         go (viewl -> EmptyL) = ""
+>         go (viewl -> h :< t) = show h ++ go t
+>         go _ = error "Should not happen" -- suppress warning about non-exhaustive patterns
+>
+> main :: IO ()
+> main = do
+>     let a = OSet.fromList [4 :: Int, 1, 3, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>     print $ showFromLeft a -- outputs: "4139025678"
 -}
 
 {-# LANGUAGE DeriveDataTypeable #-}
@@ -93,8 +118,8 @@ import qualified Data.Set as Set
                     )
 import           Prelude ((<$>), (.), Bool, Eq, Ord, Show(..), not, otherwise)
 
--- | An @OSet@ behaves much like a @Set@ but remembers the order in which the
--- elements were originally inserted.
+-- | An 'OSet' behaves much like a 'Set' but remembers the order in
+-- which the elements were originally inserted.
 data OSet a = OSet (Set a) (Seq a) deriving (Data, Eq, Ord)
 
 instance Show a => Show (OSet a) where
@@ -164,14 +189,14 @@ singleton x = OSet (Set.singleton x) (Seq.singleton x)
 member :: Ord a
     => a        -- ^ element
     -> OSet a   -- ^ set
-    -> Bool     -- ^ @True@ if element is in set, @False@ otherwise
+    -> Bool     -- ^ 'True' if element is in set, 'False' otherwise
 member x (OSet xsSet _) = x `Set.member` xsSet
 
 -- | \(O(log(N))\). Determine if the element is not in the set.
 notMember :: Ord a
     => a        -- ^ element
     -> OSet a   -- ^ set
-    -> Bool     -- ^ @True@ if element is not in set, @False@ otherwise
+    -> Bool     -- ^ 'True' if element is not in set, 'False' otherwise
 notMember = (not .) . member
 
 -- | \(O(N)\). Filter a set by returning a set whose elements satisfy the
@@ -183,8 +208,8 @@ filter p (OSet xsSet xsSeq) = OSet (Set.filter p xsSet) (Seq.filter p xsSeq)
 
 -- | \(O(N log(N))\). Return the set obtained by applying a function to each
 -- element of this set. Note that the resulting set may be smaller than the
--- original. Along with the @Ord@ constraint, this means that @OSet@ cannot
--- provide a lawful @Functor@ instance.
+-- original. Along with the 'Ord' constraint, this means that 'OSet' cannot
+-- provide a lawful 'Functor' instance.
 map :: Ord b
     => (a -> b)
     -> OSet a
