@@ -1,9 +1,11 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall -Werror #-}
 
 module Main (main) where
 
 import           Data.Set.Ordered ((|>), (|<))
 import qualified Data.Set.Ordered as OSet
+import           Data.Sequence (Seq(..))
 
 main :: IO ()
 main = do
@@ -30,3 +32,10 @@ main = do
     -- Filter
     let s5 = OSet.filter (>= 100) s4
     print s5 -- outputs: "fromList [100,400,900]"
+
+    -- Pattern matching
+    print $ foldWithPatternSynonyms (OSet.toSeq s5)
+
+foldWithPatternSynonyms :: Show a => Seq a -> String
+foldWithPatternSynonyms Empty = ""
+foldWithPatternSynonyms (x :<| xs) = show x ++ foldWithPatternSynonyms xs
