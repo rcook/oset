@@ -17,24 +17,18 @@ module Data.Set.OrderedSpec (spec) where
 import           Data.Foldable (toList)
 import           Data.Sequence (ViewL(..), ViewR(..))
 import qualified Data.Sequence as Seq (fromList, viewl, viewr)
-import           Data.Set.Ordered ((|>), (|<), OSet)
+import           Data.Set.Ordered
+                    ( (<|)
+                    , (|<)
+                    , (>|)
+                    , (|>)
+                    , (<>|)
+                    , (|<>)
+                    , (\\)
+                    , OSet
+                    )
 import qualified Data.Set.Ordered as OSet
-                    ( empty
-                    , filter
-                    , fromList
-                    , map
-                    , member
-                    , notMember
-                    , singleton
-                    , toSeq
-                    )
 import           Test.Hspec
-                    ( Spec
-                    , describe
-                    , it
-                    , shouldBe
-                    , shouldNotBe
-                    )
 
 spec :: Spec
 spec = do
@@ -107,20 +101,116 @@ spec = do
             (10 :: Int) `elem` OSet.fromList [1, 2, 3] `shouldBe` False
 
     describe "insertion with <|" $ do
-        it "appends new element" $
-            OSet.fromList  [4 :: Int, 1, 3, 9, 1] |> 5
-                `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
-        it "prefers matching element already in set" $
-            OSet.fromList  [4 :: Int, 1, 3, 9, 1] |> 4
+        it "conses new element" $
+            (5 :: Int) <| OSet.fromList [4, 1, 3, 9, 1]
+                `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
+        it "prefers elements from right" $
+            (9 :: Int) <| OSet.fromList [4, 1, 3, 9, 1]
                 `shouldBe` OSet.fromList [4, 1, 3, 9]
 
     describe "insertion with |<" $ do
         it "conses new element" $
-            (5 :: Int) |< OSet.fromList  [4, 1, 3, 9, 1]
+            (5 :: Int) |< OSet.fromList [4, 1, 3, 9, 1]
                 `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
-        it "prefers matching element already in set" $
-            (9 :: Int) |< OSet.fromList  [4, 1, 3, 9, 1]
+        it "prefers elements from left" $
+            (9 :: Int) |< OSet.fromList [4, 1, 3, 9, 1]
                 `shouldBe` OSet.fromList [9, 4, 1, 3]
+
+    describe "insertion with >|" $ do
+        it "appends new element" $
+            OSet.fromList [4 :: Int, 1, 3, 9, 1] >| 5
+                `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
+        it "prefers elements from right" $
+            OSet.fromList [4 :: Int, 1, 3, 9, 1] >| 4
+                `shouldBe` OSet.fromList [1, 3, 9, 4]
+
+    describe "insertion with |>" $ do
+        it "appends new element" $
+            OSet.fromList [4 :: Int, 1, 3, 9, 1] |> 5
+                `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
+        it "prefers elements from left" $
+            OSet.fromList [4 :: Int, 1, 3, 9, 1] |> 4
+                `shouldBe` OSet.fromList [4, 1, 3, 9]
+
+    describe "append with <>|" $ do
+        it "appends sets" $
+            OSet.fromList [4 :: Int, 1, 3, 9, 1] <>| OSet.fromList [5, 5, 6, 6, 7, 7]
+                `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
+        it "prefers elements from right" $
+            OSet.fromList [4 :: Int, 1, 3, 9, 1] <>| OSet.fromList [4, 4, 5, 5, 6, 6, 7, 7]
+                `shouldBe` OSet.fromList [1, 3, 9, 4, 5, 6, 7]
+
+    describe "append with |<>" $ do
+        it "appends sets" $
+            OSet.fromList [4 :: Int, 1, 3, 9, 1] |<> OSet.fromList [5, 5, 6, 6, 7, 7]
+                `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
+        it "prefers elements from left" $
+            OSet.fromList [4 :: Int, 1, 3, 9, 1] |<> OSet.fromList [4, 4, 5, 5, 6, 6, 7, 7]
+                `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
+
+    describe "null" $ do
+        it "returns True for empty set" $ do
+            null (OSet.fromList [] :: OSet Int) `shouldBe` True
+            null (OSet.empty :: OSet Int) `shouldBe` True
+        it "returns False for non-empty set" $
+            null (OSet.singleton 1 :: OSet Int) `shouldBe` False
+
+    describe "size" $ do
+        it "returns 0 empty set" $ do
+            OSet.size (OSet.fromList [] :: OSet Int) `shouldBe` 0
+            OSet.size (OSet.empty :: OSet Int) `shouldBe` 0
+        it "returns length for non-empty set" $ do
+            OSet.size (OSet.singleton 1 :: OSet Int) `shouldBe` 1
+            OSet.size (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int) `shouldBe` 5
+            OSet.size (OSet.fromList [1, 1, 2, 2, 3, 3] :: OSet Int) `shouldBe` 3
+
+    describe "delete" $ do
+        it "deletes element when in set" $
+            1 `OSet.delete` (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int)
+                `shouldBe` OSet.fromList [2, 3, 4, 5]
+        it "does not fail when element not in set" $
+            6 `OSet.delete` (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int)
+                `shouldBe` OSet.fromList [1, 2, 3, 4, 5]
+
+    describe "\\\\" $
+        it "removes specified elements" $ do
+            (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int)
+                \\ OSet.fromList []
+                `shouldBe` OSet.fromList [1, 2, 3, 4, 5]
+            (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int)
+                \\ OSet.fromList [3, 2, 1]
+                `shouldBe` OSet.fromList [4, 5]
+
+    describe "findIndex" $ do
+        it "finds element" $
+            (1 :: Int) `OSet.findIndex` OSet.fromList [5, 4, 3, 2, 1]
+                `shouldBe` Just 4
+        it "finds nothing" $
+            (10 :: Int) `OSet.findIndex` OSet.fromList [5, 4, 3, 2, 1]
+                `shouldBe` Nothing
+
+    describe "elemAt" $ do
+        it "returns element" $ do
+            OSet.fromList [1, 2, 3, 4, 5] `OSet.elemAt` 0
+                `shouldBe` (Just 1 :: Maybe Int)
+            OSet.fromList [1, 2, 3, 4, 5] `OSet.elemAt` 1
+                `shouldBe` (Just 2 :: Maybe Int)
+            OSet.fromList [5, 4, 3, 2, 1] `OSet.elemAt` 0
+                `shouldBe` (Just 5 :: Maybe Int)
+            OSet.fromList [5, 4, 3, 2, 1] `OSet.elemAt` 1
+                `shouldBe` (Just 4 :: Maybe Int)
+        it "returns nothing if index out of range" $ do
+            OSet.empty `OSet.elemAt` 0
+                `shouldBe` (Nothing :: Maybe Int)
+            OSet.empty `OSet.elemAt` (-10)
+                `shouldBe` (Nothing :: Maybe Int)
+            OSet.empty `OSet.elemAt` 10
+                `shouldBe` (Nothing :: Maybe Int)
+
+    describe "toAscList" $
+        it "returns elements in ascending order" $
+            OSet.toAscList (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int)
+                `shouldBe` [1, 2, 3, 4, 5]
 
     describe "singleton" $
         it "contains one element" $ do
