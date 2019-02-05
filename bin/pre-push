@@ -58,6 +58,6 @@ run_fail_fast stack build --pedantic
 
 run_fail_fast stack test
 
-run_fail_fast $repo_dir/bin/docs
+run_fail_fast stack haddock
 
 report_success "All pre-push steps succeeded"
