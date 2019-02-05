@@ -11,7 +11,7 @@ An insertion-order-preserving set
 
 ## Documentation
 
-[View documentation][docs]
+[View documentation on Hackage][docs]
 
 ## Build and test
 
@@ -24,5 +24,5 @@ stack build --test
 
 [MIT License](LICENSE)
 
-[docs]: http://rcook.github.io/oset
+[docs]: http://hackage.haskell.org/package/oset
 [ordered-containers]: http://hackage.haskell.org/package/ordered-containers-0.1.1
