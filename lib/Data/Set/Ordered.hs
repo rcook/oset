@@ -189,14 +189,14 @@ singleton x = OSet (Set.singleton x) (Seq.singleton x)
 member :: Ord a
     => a        -- ^ element
     -> OSet a   -- ^ set
-    -> Bool     -- ^ 'True' if element is in set, 'False' otherwise
+    -> Bool     -- ^ 'Data.Bool.True' if element is in set, 'Data.Bool.False' otherwise
 member x (OSet xsSet _) = x `Set.member` xsSet
 
 -- | \(O(log(N))\). Determine if the element is not in the set.
 notMember :: Ord a
     => a        -- ^ element
     -> OSet a   -- ^ set
-    -> Bool     -- ^ 'True' if element is not in set, 'False' otherwise
+    -> Bool     -- ^ 'Data.Bool.True' if element is not in set, 'Data.Bool.False' otherwise
 notMember = (not .) . member
 
 -- | \(O(N)\). Filter a set by returning a set whose elements satisfy the
@@ -209,7 +209,7 @@ filter p (OSet xsSet xsSeq) = OSet (Set.filter p xsSet) (Seq.filter p xsSeq)
 -- | \(O(N log(N))\). Return the set obtained by applying a function to each
 -- element of this set. Note that the resulting set may be smaller than the
 -- original. Along with the 'Ord' constraint, this means that 'OSet' cannot
--- provide a lawful 'Functor' instance.
+-- provide a lawful 'Data.Functor.Functor' instance.
 map :: Ord b
     => (a -> b)
     -> OSet a
@@ -217,9 +217,9 @@ map :: Ord b
 map f (OSet _ xsSeq) = foldl' (|>) empty (f <$> xsSeq)
 
 -- | \(O(1)\). Return ordered sequence of elements in set. For obtaining
--- a useful 'Functor' this is recommended over 'toList' due to its
--- constant-time performance. Similarly, if you want to pattern-match on
--- the 'OSet', obtain the sequence and use view patterns instead of
--- converting to a list.
+-- a useful 'Data.Functor.Functor' this is recommended over 'toList' due
+-- to its constant-time performance. Similarly, if you want to
+-- pattern-match on the 'OSet', obtain the sequence and use view
+-- patterns instead of converting to a list.
 toSeq :: OSet a -> Seq a
 toSeq (OSet _ xsSeq) = xsSeq
