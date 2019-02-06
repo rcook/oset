@@ -80,7 +80,6 @@ pattern-match on the resulting sequence:
 
 {-# OPTIONS_GHC -Wall -Werror #-}
 
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 
 module Data.Set.Ordered
