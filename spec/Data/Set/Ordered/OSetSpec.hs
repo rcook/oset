@@ -1,5 +1,5 @@
 {-|
-Module      : Data.Set.OrderedSpec
+Module      : Data.Set.Ordered.OSetSpec
 Description : Tests
 Copyright   : (C) Richard Cook, 2019
 Licence     : MIT
@@ -12,7 +12,7 @@ Portability : portable
 
 {-# LANGUAGE ViewPatterns #-}
 
-module Data.Set.OrderedSpec (spec) where
+module Data.Set.Ordered.OSetSpec (spec) where
 
 import           Data.Foldable (toList)
 import           Data.Sequence (ViewL(..), ViewR(..))

@@ -31,7 +31,8 @@ library
     , containers
   exposed-modules:
       Data.Set.Ordered
-    , Data.Set.Ordered.Instances
+    , Data.Set.Ordered.LR
+    , Data.Set.Ordered.OSet
 
 test-suite oset-spec
   type:                 exitcode-stdio-1.0
@@ -39,8 +40,8 @@ test-suite oset-spec
   hs-source-dirs:       spec
   main-is:              Spec.hs
   other-modules:
-      Data.Set.Ordered.InstancesSpec
-    , Data.Set.OrderedSpec
+      Data.Set.Ordered.LRSpec
+    , Data.Set.Ordered.OSetSpec
   build-depends:
       base >= 4.7 && < 5
     , containers

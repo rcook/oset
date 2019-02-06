@@ -1,5 +1,5 @@
 {-|
-Module      : Data.Set.Ordered.InstancesSpec
+Module      : Data.Set.Ordered.LRSpec
 Description : Tests
 Copyright   : (C) Richard Cook, 2019
 Licence     : MIT
@@ -10,10 +10,10 @@ Portability : portable
 
 {-# OPTIONS_GHC -Wall -Werror #-}
 
-module Data.Set.Ordered.InstancesSpec (spec) where
+module Data.Set.Ordered.LRSpec (spec) where
 
 import           Data.Foldable (Foldable(..))
-import           Data.Set.Ordered.Instances
+import           Data.Set.Ordered
                     ( OSetL(..)
                     , OSetR(..)
                     , singletonL

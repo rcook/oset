@@ -1,6 +1,6 @@
 {-|
-Module      : Data.Set.Ordered.Instances
-Description : Type class instances for @OSet@
+Module      : Data.Set.Ordered.LR
+Description : Left- and right-biased wrappers for @OSet@
 Copyright   : (C) Richard Cook, 2019
 Licence     : MIT
 Maintainer  : rcook@rcook.org
@@ -13,7 +13,7 @@ Portability : portable
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 
-module Data.Set.Ordered.Instances
+module Data.Set.Ordered.LR
     ( OSetL(..)
     , OSetR(..)
     , singletonL
@@ -24,8 +24,8 @@ import           Data.Data (Data)
 import           Data.Foldable (Foldable(..))
 import           Data.Monoid (Monoid(..))
 import           Data.Semigroup (Semigroup(..))
-import           Data.Set.Ordered ((<>|), (|<>), OSet)
-import qualified Data.Set.Ordered as OSet (empty, singleton)
+import           Data.Set.Ordered.OSet ((<>|), (|<>), OSet)
+import qualified Data.Set.Ordered.OSet as OSet (empty, singleton)
 import           Prelude ((.), Eq, Ord, Show(..))
 
 -- | A left-biased 'OSet'
