@@ -9,9 +9,10 @@ Portability : portable
 
 This module provides 'OSet', an insertion-order-preserving set, with type class
 instances for 'Foldable' and 'Data' as well as a 'map' function and other
-features. 'Semigroup' and 'Monoid' instances are provided on
-'Data.Set.Ordered.Instances.OSetL' and 'Data.Set.Ordered.Instances.OSetR' which
-are left- and right-biased wrappers respectively.
+features. 'Data.Semigroup.Semigroup' and 'Data.Monoid.Monoid' instances are
+provided on 'Data.Set.Ordered.Instances.OSetL' and
+'Data.Set.Ordered.Instances.OSetR' which are left- and right-biased wrappers
+respectively.
 
 This is intended to be API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html OSet>
 in <http://hackage.haskell.org/package/ordered-containers-0.1.1 unordered-containers>
