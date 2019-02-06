@@ -1,5 +1,16 @@
-{-# LANGUAGE PatternSynonyms #-}
+{-|
+Module      : Main
+Description : Demo app
+Copyright   : (C) Richard Cook, 2019
+Licence     : MIT
+Maintainer  : rcook@rcook.org
+Stability   : stable
+Portability : portable
+-}
+
 {-# OPTIONS_GHC -Wall -Werror #-}
+
+{-# LANGUAGE PatternSynonyms #-}
 
 module Main (main) where
 

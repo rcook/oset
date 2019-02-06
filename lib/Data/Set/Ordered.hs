@@ -1,6 +1,6 @@
 {-|
 Module      : Data.Set.Ordered
-Description : Provides an insertion-order-preserving set
+Description : An insertion-order-preserving set
 Copyright   : (C) Richard Cook, 2019
 Licence     : MIT
 Maintainer  : rcook@rcook.org
@@ -75,9 +75,10 @@ pattern-match on the resulting sequence:
 >     print $ showFromLeft a -- outputs: "4139025678"
 -}
 
+{-# OPTIONS_GHC -Wall -Werror #-}
+
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE NoImplicitPrelude #-}
-{-# OPTIONS_GHC -Wall -Werror #-}
 
 module Data.Set.Ordered
     ( (|>)
