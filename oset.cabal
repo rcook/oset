@@ -1,5 +1,5 @@
 name:                   oset
-version:                0.2.0.0
+version:                0.3.0.0
 synopsis:               An insertion-order-preserving set
 description:
     This package provides @OSet@, an insertion-order-preserving set, with type class instances for @Foldable@, @Semigroup@, @Monoid@ and @Data@.
