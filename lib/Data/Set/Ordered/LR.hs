@@ -28,7 +28,7 @@ import           Data.Set.Ordered.OSet ((<>|), (|<>), OSet)
 import qualified Data.Set.Ordered.OSet as OSet (empty, singleton)
 import           Prelude ((.), Eq, Ord, Show(..))
 
--- | A left-biased 'OSet'
+-- | A left-biased 'OSet'.
 newtype OSetL a = OSetL
     { unOSetL :: OSet a -- ^ the wrapped 'OSet'
     } deriving (Data, Eq, Ord)
@@ -51,7 +51,7 @@ instance Ord a => Semigroup (OSetL a) where
 instance Ord a => Monoid (OSetL a) where
     mempty = OSetL OSet.empty
 
--- | A right-biased 'OSet'
+-- | A right-biased 'OSet'.
 newtype OSetR a = OSetR
     { unOSetR :: OSet a -- ^ the wrapped 'OSet'
     } deriving (Data, Eq, Ord)
