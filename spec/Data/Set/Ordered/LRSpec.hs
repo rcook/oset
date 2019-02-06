@@ -16,6 +16,8 @@ import           Data.Foldable (Foldable(..))
 import           Data.Set.Ordered
                     ( OSetL(..)
                     , OSetR(..)
+                    , emptyL
+                    , emptyR
                     , singletonL
                     , singletonR
                     )
@@ -34,6 +36,9 @@ spec = do
                 <> singletonL 5
                 )
                 `shouldBe` [5, 3, 2]
+    describe "emptyL" $
+        it "contains no values" $
+            null emptyL `shouldBe` True
     describe "OSetL.mempty" $ do
         it "contains no values" $
             toList (mempty :: OSetL Int) `shouldBe` ([] :: [Int])
@@ -65,6 +70,9 @@ spec = do
                 <> singletonR 5
                 )
                 `shouldBe` [3, 2, 5]
+    describe "emptyR" $
+        it "contains no values" $
+            null emptyR `shouldBe` True
     describe "OSetR.mempty" $ do
         it "contains no values" $
             toList (mempty :: OSetR Int) `shouldBe` ([] :: [Int])

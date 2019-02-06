@@ -16,6 +16,8 @@ Portability : portable
 module Data.Set.Ordered.LR
     ( OSetL(..)
     , OSetR(..)
+    , emptyL
+    , emptyR
     , singletonL
     , singletonR
     ) where
@@ -33,6 +35,11 @@ newtype OSetL a = OSetL
     { unOSetL :: OSet a -- ^ the wrapped 'OSet'
     } deriving (Data, Eq, Ord)
 
+-- | \(O(1)\). A left-biased empty set.
+emptyL ::
+    OSetL a -- ^ set
+emptyL = OSetL OSet.empty
+
 -- | \(O(1)\). A left-biased singleton set containing the given element.
 singletonL ::
     a           -- ^ element
@@ -49,12 +56,17 @@ instance Ord a => Semigroup (OSetL a) where
     (OSetL as) <> (OSetL bs) = OSetL (as |<> bs)
 
 instance Ord a => Monoid (OSetL a) where
-    mempty = OSetL OSet.empty
+    mempty = emptyL
 
 -- | A right-biased 'OSet'.
 newtype OSetR a = OSetR
     { unOSetR :: OSet a -- ^ the wrapped 'OSet'
     } deriving (Data, Eq, Ord)
+
+-- | \(O(1)\). A right-biased empty set.
+emptyR ::
+    OSetR a -- ^ set
+emptyR = OSetR OSet.empty
 
 -- | \(O(1)\). A right-biased singleton set containing the given element.
 singletonR ::
@@ -72,5 +84,4 @@ instance Ord a => Semigroup (OSetR a) where
     (OSetR as) <> (OSetR bs) = OSetR (as <>| bs)
 
 instance Ord a => Monoid (OSetR a) where
-    mempty = OSetR OSet.empty
-
+    mempty = emptyR
