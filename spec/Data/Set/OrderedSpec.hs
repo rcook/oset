@@ -64,28 +64,6 @@ spec = do
         it "contains no values" $
             toList OSet.empty `shouldBe` ([] :: [Int])
 
-    describe "mappend" $ do
-        it "removes duplicates" $
-            toList (OSet.fromList [4 :: Int, 3, 4, 1, 9]
-                <> OSet.fromList [9, 8..0])
-                `shouldBe` [4, 3, 1, 9, 8, 7, 6, 5, 2, 0]
-        it "is associative" $ do
-            let a = OSet.fromList [4 :: Int, 3, 4, 1, 9]
-                b = OSet.fromList [9, 8..0]
-                c = OSet.fromList [-1, 10]
-                result = OSet.fromList [4, 3, 1, 9, 8, 7, 6, 5, 2, 0, -1, 10]
-            a <> b <> c `shouldBe` result
-            (a <> b) <> c `shouldBe` result
-            a <> (b <> c) `shouldBe` result
-
-    describe "mempty" $ do
-        it "contains no values" $
-            toList (mempty :: OSet Int) `shouldBe` ([] :: [Int])
-        it "is neutral element" $ do
-            let a = OSet.fromList [4 :: Int, 3, 4, 1, 9]
-            mempty <> a `shouldBe` a
-            a <> mempty `shouldBe` a
-
     describe "member and notMember" $ do
         it "handle element in set" $ do
             (1 :: Int) `OSet.member` OSet.fromList [1, 2, 3] `shouldBe` True

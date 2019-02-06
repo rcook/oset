@@ -7,9 +7,11 @@ Maintainer  : rcook@rcook.org
 Stability   : stable
 Portability : portable
 
-This module provides 'OSet', an insertion-order-preserving set, with
-type class instances for 'Foldable', 'Semigroup', 'Monoid' and 'Data' as
-well as a 'map' function.
+This module provides 'OSet', an insertion-order-preserving set, with type class
+instances for 'Foldable' and 'Data' as well as a 'map' function and other
+features. 'Semigroup' and 'Monoid' instances are provided on
+'Data.Set.Ordered.Instances.OSetL' and 'Data.Set.Ordered.Instances.OSetR' which
+are left- and right-biased wrappers respectively.
 
 This is intended to be API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html OSet>
 in <http://hackage.haskell.org/package/ordered-containers-0.1.1 unordered-containers>
@@ -19,7 +21,7 @@ Here's the quick-start guide to using this package:
 
 > module Main (main) where
 >
-> import           Data.Set.Ordered ((|>), (|<))
+> import           Data.Set.Ordered ((|>), (|<), (|<>))
 > import qualified Data.Set.Ordered as OSet
 >
 > main :: IO ()
@@ -36,8 +38,8 @@ Here's the quick-start guide to using this package:
 >     let s2 = 4 |< s0
 >     print s2 -- outputs: "fromList [4,1,2,3,-1,-2,-3]"
 >
->     -- Semigroup
->     let s3 = s0 <> OSet.fromList [10, 10, 20, 20, 30, 30]
+>     -- Append
+>     let s3 = s0 |<> OSet.fromList [10, 10, 20, 20, 30, 30]
 >     print s3 -- outputs: "fromList [1,2,3,4,-1,-2,-3,10,20,30]"
 >
 >     -- Map (but note that OSet is not a functor)
@@ -115,8 +117,6 @@ module Data.Set.Ordered
 import           Data.Data (Data)
 import           Data.Foldable (Foldable(..), foldl')
 import           Data.Maybe (Maybe(..))
-import           Data.Monoid (Monoid(..))
-import           Data.Semigroup (Semigroup(..))
 import           Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
                     ( (|>)
@@ -166,12 +166,6 @@ instance Show a => Show (OSet a) where
 instance Foldable OSet where
     foldMap f (OSet _ xsSeq) = foldMap f xsSeq
     x `elem` (OSet xsSet _) = x `elem` xsSet
-
-instance Ord a => Semigroup (OSet a) where
-    (<>) = foldl' (|>)
-
-instance Ord a => Monoid (OSet a) where
-    mempty = empty
 
 -- | \(O(log(N))\). Add an element to the left end of the sequence if the set
 -- does not already contain the element. Otherwise ignore the element.

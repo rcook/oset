@@ -14,7 +14,7 @@ Portability : portable
 
 module Main (main) where
 
-import           Data.Set.Ordered ((|>), (|<))
+import           Data.Set.Ordered ((|>), (|<), (|<>))
 import qualified Data.Set.Ordered as OSet
 import           Data.Sequence (Seq(..))
 
@@ -32,8 +32,8 @@ main = do
     let s2 = 4 |< s0
     print s2 -- outputs: "fromList [4,1,2,3,-1,-2,-3]"
 
-    -- Semigroup
-    let s3 = s0 <> OSet.fromList [10, 10, 20, 20, 30, 30]
+    -- Append
+    let s3 = s0 |<> OSet.fromList [10, 10, 20, 20, 30, 30]
     print s3 -- outputs: "fromList [1,2,3,4,-1,-2,-3,10,20,30]"
 
     -- Map (but note that OSet is not a functor)

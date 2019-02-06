@@ -14,11 +14,12 @@ module Data.Set.Ordered.InstancesSpec (spec) where
 
 import           Data.Foldable (Foldable(..))
 import           Data.Set.Ordered.Instances
-                    ( OSetL
-                    , OSetR
+                    ( OSetL(..)
+                    , OSetR(..)
                     , singletonL
                     , singletonR
                     )
+import qualified Data.Set.Ordered as OSet (fromList)
 import           Test.Hspec (Spec, describe, it, shouldBe)
 
 spec :: Spec
@@ -33,6 +34,27 @@ spec = do
                 <> singletonL 5
                 )
                 `shouldBe` [5, 3, 2]
+    describe "OSetL.mempty" $ do
+        it "contains no values" $
+            toList (mempty :: OSetL Int) `shouldBe` ([] :: [Int])
+        it "is neutral element" $ do
+            let a = OSetL $ OSet.fromList [4 :: Int, 3, 4, 1, 9]
+            (mempty :: OSetL Int) <> a `shouldBe` a
+            a <> (mempty :: OSetL Int) `shouldBe` a
+    describe "OSetL.<>" $ do
+        it "removes duplicates" $
+            toList (OSetL (OSet.fromList [4 :: Int, 3, 4, 1, 9])
+                <> OSetL (OSet.fromList [9, 8..0]))
+                `shouldBe` [4, 3, 1, 9, 8, 7, 6, 5, 2, 0]
+        it "is associative" $ do
+            let a = OSetL $ OSet.fromList [4 :: Int, 3, 4, 1, 9]
+                b = OSetL $ OSet.fromList [9, 8..0]
+                c = OSetL $ OSet.fromList [-1, 10]
+                result = OSetL $ OSet.fromList [4, 3, 1, 9, 8, 7, 6, 5, 2, 0, -1, 10]
+            a <> b <> c `shouldBe` result
+            (a <> b) <> c `shouldBe` result
+            a <> (b <> c) `shouldBe` result
+
     describe "OSetR" $
         it "preserves elements from the right-hand operand" $
             toList
@@ -43,3 +65,23 @@ spec = do
                 <> singletonR 5
                 )
                 `shouldBe` [3, 2, 5]
+    describe "OSetR.mempty" $ do
+        it "contains no values" $
+            toList (mempty :: OSetR Int) `shouldBe` ([] :: [Int])
+        it "is neutral element" $ do
+            let a = OSetR $ OSet.fromList [4 :: Int, 3, 4, 1, 9]
+            (mempty :: OSetR Int) <> a `shouldBe` a
+            a <> (mempty :: OSetR Int) `shouldBe` a
+    describe "OSetR.<>" $ do
+        it "removes duplicates" $
+            toList (OSetR (OSet.fromList [4 :: Int, 3, 4, 1, 9])
+                <> OSetR (OSet.fromList [9, 8..0]))
+                `shouldBe` [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+        it "is associative" $ do
+            let a = OSetR $ OSet.fromList [4 :: Int, 3, 4, 1, 9]
+                b = OSetR $ OSet.fromList [9, 8..0]
+                c = OSetR $ OSet.fromList [-1, 10]
+                result = OSetR $ OSet.fromList [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, 10]
+            a <> b <> c `shouldBe` result
+            (a <> b) <> c `shouldBe` result
+            a <> (b <> c) `shouldBe` result
