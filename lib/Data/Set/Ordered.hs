@@ -88,11 +88,7 @@ module Data.Set.Ordered
     , OSetR(..)
     , -- * Trivial sets
       empty
-    , emptyL
-    , emptyR
     , singleton
-    , singletonL
-    , singletonR
     , -- * Insertion
       (<|)
     , (|<)

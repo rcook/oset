@@ -34,15 +34,18 @@ spec :: Spec
 spec = do
     describe "equals" $
         it "compares as expected" $ do
-            OSet.fromList [4 :: Int, 3, 4, 1, 9]
+            (OSet.fromList [4, 3, 4, 1, 9] :: OSet Int)
                 `shouldBe` OSet.fromList [4, 3, 1, 9]
-            OSet.fromList [4 :: Int, 3, 4, 1, 9]
+            (OSet.fromList [4, 3, 4, 1, 9] :: OSet Int)
                 `shouldNotBe` OSet.fromList [3, 4, 1, 9]
 
     describe "compare" $
         it "compares as expected" $ do
-            let a = OSet.fromList [4 :: Int, 3, 4, 1, 9]
+            let a :: OSet Int
+                a = OSet.fromList [4, 3, 4, 1, 9]
+                b :: OSet Int
                 b = OSet.fromList [4, 3, 1, 9]
+                c :: OSet Int
                 c = OSet.fromList [4, 3, 1]
             a `compare` b `shouldBe` EQ
             a `compare` c `shouldBe` GT
@@ -52,17 +55,17 @@ spec = do
 
     describe "show" $
         it "shows content in list syntax" $
-            show (OSet.fromList [4 :: Int, 3, 4, 1, 9])
+            show (OSet.fromList [4, 3, 4, 1, 9] :: OSet Int)
                 `shouldBe` "fromList [4,3,1,9]"
 
     describe "fromList" $
         it "removes duplicates" $
-            toList (OSet.fromList [4 :: Int, 3, 4, 1, 9])
+            toList (OSet.fromList [4, 3, 4, 1, 9] :: OSet Int)
                 `shouldBe` [4, 3, 1, 9]
 
     describe "empty" $
         it "contains no values" $
-            toList OSet.empty `shouldBe` ([] :: [Int])
+            toList (OSet.empty :: OSet Int) `shouldBe` []
 
     describe "member and notMember" $ do
         it "handle element in set" $ do
@@ -74,56 +77,60 @@ spec = do
 
     describe "elem" $ do
         it "handle element in set" $
-            (1 :: Int) `elem` OSet.fromList [1, 2, 3] `shouldBe` True
+            1 `elem` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` True
         it "handle element not in set" $
-            (10 :: Int) `elem` OSet.fromList [1, 2, 3] `shouldBe` False
+            10 `elem` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` False
 
     describe "insertion with <|" $ do
         it "conses new element" $
-            (5 :: Int) <| OSet.fromList [4, 1, 3, 9, 1]
+            5 <| (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
                 `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
         it "prefers elements from right" $
-            (9 :: Int) <| OSet.fromList [4, 1, 3, 9, 1]
+            9 <| (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
                 `shouldBe` OSet.fromList [4, 1, 3, 9]
 
     describe "insertion with |<" $ do
         it "conses new element" $
-            (5 :: Int) |< OSet.fromList [4, 1, 3, 9, 1]
+            5 |< (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
                 `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
         it "prefers elements from left" $
-            (9 :: Int) |< OSet.fromList [4, 1, 3, 9, 1]
+            9 |< (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
                 `shouldBe` OSet.fromList [9, 4, 1, 3]
 
     describe "insertion with >|" $ do
         it "appends new element" $
-            OSet.fromList [4 :: Int, 1, 3, 9, 1] >| 5
+            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int) >| 5
                 `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
         it "prefers elements from right" $
-            OSet.fromList [4 :: Int, 1, 3, 9, 1] >| 4
+            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int) >| 4
                 `shouldBe` OSet.fromList [1, 3, 9, 4]
 
     describe "insertion with |>" $ do
         it "appends new element" $
-            OSet.fromList [4 :: Int, 1, 3, 9, 1] |> 5
+            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int) |> 5
                 `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
         it "prefers elements from left" $
-            OSet.fromList [4 :: Int, 1, 3, 9, 1] |> 4
+            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int) |> 4
                 `shouldBe` OSet.fromList [4, 1, 3, 9]
 
     describe "append with <>|" $ do
         it "appends sets" $
-            OSet.fromList [4 :: Int, 1, 3, 9, 1] <>| OSet.fromList [5, 5, 6, 6, 7, 7]
+            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
+            <>| OSet.fromList [5, 5, 6, 6, 7, 7]
                 `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
         it "prefers elements from right" $
-            OSet.fromList [4 :: Int, 1, 3, 9, 1] <>| OSet.fromList [4, 4, 5, 5, 6, 6, 7, 7]
+            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
+                <>| OSet.fromList [4, 4, 5, 5, 6, 6, 7, 7]
                 `shouldBe` OSet.fromList [1, 3, 9, 4, 5, 6, 7]
 
     describe "append with |<>" $ do
         it "appends sets" $
-            OSet.fromList [4 :: Int, 1, 3, 9, 1] |<> OSet.fromList [5, 5, 6, 6, 7, 7]
+            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
+                |<> OSet.fromList [5, 5, 6, 6, 7, 7]
                 `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
         it "prefers elements from left" $
-            OSet.fromList [4 :: Int, 1, 3, 9, 1] |<> OSet.fromList [4, 4, 5, 5, 6, 6, 7, 7]
+            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
+                |<> OSet.fromList [4, 4, 5, 5, 6, 6, 7, 7]
                 `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
 
     describe "null" $ do
