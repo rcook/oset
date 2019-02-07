@@ -1,28 +1,80 @@
+{-|
+Module      : Data.Set.Ordered.Classes
+Description : Type classes defining standard ordered-set operations
+Copyright   : (C) Richard Cook, 2019
+Licence     : MIT
+Maintainer  : rcook@rcook.org
+Stability   : stable
+Portability : portable
+-}
+
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Data.Set.Ordered.Classes
-    ( PreserveL(..)
+    ( -- * Trivial sets and conversion
+      Values(..)
+    , -- * Insertion
+      PreserveL(..)
     , PreserveR(..)
-    , Values(..)
     ) where
 
+-- | Trivial sets and conversions from lists. Set type is @c@, element
+-- type is @a@.
 class Values a c where
+    -- | \(O(1)\). The empty set.
     empty :: c a
+    -- | \(O(1)\). A singleton set containing the given element.
     singleton :: a -> c a
+    -- | \(O(N log(N))\). Create a set from a finite list of elements.
+    -- If an element occurs multiple times in the original list, only
+    -- the first occurrence is retained in the resulting set. The
+    -- function 'Data.Foldable.Foldable.toList', \(O(N)\), can be used
+    -- to return a list of the elements in the original insert order
+    -- with duplicates removed.
     fromList :: Ord a => [a] -> c a
 
+-- | 'Data.Set.Ordered.OSet' and 'Data.Set.Ordered.OSetL' operations
+-- that preserve elements from the left-hand operand in the case of
+-- duplicate elements. Set type is @c@, element type is @a@.
 class PreserveL a c where
+    -- | \(O(log(N))\) if the element is not in the set, \(O(N)\) if the
+    -- element is already in the set. Add an element to the left end of
+    -- the sequence if the set does not already contain the element.
+    -- Move the element to the left end of the sequence if the element
+    -- is already present in the set.
     (|<) :: a -> c a -> c a
+    infixr 5 |<
+    -- | \(O(log(N))\). Add an element to the right end of the sequence
+    -- if the set does not already contain the element. Otherwise ignore
+    -- the element.
     (|>) :: c a -> a -> c a
+    infixl 5 |>
+    -- | \(O(Nlog(N))\) worst case. Add elements from the right-hand set
+    -- to the left-hand set. If elements occur in both sets, then this
+    -- operation discards elements from the right-hand set and preserves
+    -- those from the left.
     (|<>) :: c a -> c a -> c a
-infixr 5 |<
-infixl 5 |>
-infixr 6 |<>
+    infixr 6 |<>
 
+-- | 'Data.Set.Ordered.OSet' and 'Data.Set.Ordered.OSetR' operations
+-- that preserve elements from the right-hand operand in the case of
+-- duplicate elements. Set type is @c@, element type is @a@.
 class PreserveR a c where
+    -- | \(O(log(N))\). Add an element to the left end of the sequence
+    -- if the set does not already contain the element. Otherwise ignore
+    -- the element.
     (<|) :: a -> c a -> c a
+    infixr 5 <|
+    -- | \(O(log(N))\) if the element is not in the set, \(O(N)\) if the
+    -- element is already in the set. Add an element to the right end of
+    -- the sequence if the set does not already contain the element.
+    -- Move the element to the right end of the sequence if the element
+    -- is already present in the set.
     (>|) :: c a -> a -> c a
+    infixl 5 >|
+    -- | \(O(N^2)\) worst case. Add elements from the right-hand set to
+    -- the left-hand set. If elements occur in both sets, then this
+    -- operation discards elements from the left-hand set and preserves
+    -- those from the right.
     (<>|) :: c a -> c a -> c a
-infixr 5 <|
-infixl 5 >|
-infixr 6 <>|
+    infixr 6 <>|

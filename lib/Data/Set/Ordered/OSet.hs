@@ -136,120 +136,6 @@ instance Ord a => PreserveR a OSet where
             else OSet (Set.insert x xsSet) (xsSeq Seq.|> x)
     (<>|) = foldl' (>|)
 
--- | \(O(log(N))\). Add an element to the left end of the sequence if the set
--- does not already contain the element. Otherwise ignore the element.
-{-
-(<|) :: Ord a
-    => a        -- ^ element
-    -> OSet a   -- ^ set
-    -> OSet a   -- ^ set
-x <| o@(OSet xsSet xsSeq) =
-    if x `Set.member` xsSet
-        then o
-        else OSet (Set.insert x xsSet) (x Seq.<| xsSeq)
-infixr 5 <|
--}
-
--- | \(O(log(N))\) if the element is not in the set, \(O(N)\) if the element is
--- already in the set. Add an element to the left end of the sequence if the set
--- does not already contain the element. Move the element to the left end of the
--- sequence if the element is already present in the set.
-{-
-(|<) :: Ord a
-    => a        -- ^ element
-    -> OSet a   -- ^ set
-    -> OSet a   -- ^ set
-x |< (OSet xsSet xsSeq) =
-    if x `Set.member` xsSet
-        then
-            let Just idx = Seq.elemIndexL x xsSeq
-            in OSet xsSet (x Seq.<| Seq.deleteAt idx xsSeq)
-        else OSet (Set.insert x xsSet) (x Seq.<| xsSeq)
-infixr 5 |<
--}
-
--- | \(O(log(N))\) if the element is not in the set, \(O(N)\) if the element is
--- already in the set. Add an element to the right end of the sequence if the
--- set does not already contain the element. Move the element to the right end
--- of the sequence if the element is already present in the set.
-{-
-(>|) :: Ord a
-    => OSet a   -- ^ set
-    -> a        -- ^ element
-    -> OSet a   -- ^ set
-(OSet xsSet xsSeq) >| x =
-    if x `Set.member` xsSet
-        then
-            let Just idx = Seq.elemIndexL x xsSeq
-            in OSet xsSet (Seq.deleteAt idx xsSeq Seq.|> x)
-        else OSet (Set.insert x xsSet) (xsSeq Seq.|> x)
-infixl 5 >|
--}
-
--- | \(O(log(N))\). Add an element to the right end of the sequence if the set
--- does not already contain the element. Otherwise ignore the element.
-{-
-(|>) :: Ord a
-    => OSet a   -- ^ set
-    -> a        -- ^ element
-    -> OSet a   -- ^ set
-o@(OSet xsSet xsSeq) |> x
-    | x `member` o = o
-    | otherwise = OSet (Set.insert x xsSet) (xsSeq Seq.|> x)
-infixl 5 |>
--}
-
--- | \(O(N^2)\) worst case. Add elements from the right-hand set to the
--- left-hand set. If elements occur in both sets, then this operation discards
--- elements from the left-hand set and preserves those from the right.
-{-
-(<>|) :: Ord a
-    => OSet a   -- ^ set
-    -> OSet a   -- ^ set
-    -> OSet a   -- ^ set
-(<>|) = foldl' (>|)
-infixr 6 <>|
--}
-
--- | \(O(Nlog(N))\) worst case. Add elements from the right-hand set to the
--- left-hand set. If elements occur in both sets, then this operation discards
--- elements from the right-hand set and preserves those from the left.
-{-
-(|<>) :: Ord a
-    => OSet a   -- ^ set
-    -> OSet a   -- ^ set
-    -> OSet a   -- ^ set
-(|<>) = foldl' (|>)
-infixr 6 |<>
--}
-
--- | \(O(N log(N))\). Create a set from a finite list of elements. If an element
--- occurs multiple times in the original list, only the first occurrence is
--- retained in the resulting set. The function 'toList', \(O(N)\), in 'Foldable'
--- can be used to return a list of the elements in the original insert order
--- with duplicates removed.
-{-
-fromList :: Ord a
-    => [a]      -- ^ elements
-    -> OSet a   -- ^ set
-fromList = foldl' (|>) empty
--}
-
--- | \(O(1)\). The empty set.
-{-
-empty ::
-    OSet a      -- ^ set
-empty = OSet Set.empty Seq.empty
--}
-
--- | \(O(1)\). A singleton set containing the given element.
-{-
-singleton ::
-    a           -- ^ element
-    -> OSet a   -- ^ set
-singleton x = OSet (Set.singleton x) (Seq.singleton x)
--}
-
 -- | \(O(1)\). The number of elements in the set.
 size ::
     OSet a  -- ^ set
@@ -289,10 +175,11 @@ map :: Ord b
 map f (OSet _ xsSeq) = foldl' (|>) empty (f <$> xsSeq)
 
 -- | \(O(1)\). Return ordered sequence of elements in set. For obtaining
--- a useful 'Data.Functor.Functor' instance this is recommended over 'toList'
--- due to its \(O(1)\) performance. Similarly, if you want to pattern-match on
--- the 'OSet', obtain the sequence and use view patterns or pattern synonyms
--- instead of converting to a list.
+-- a useful 'Data.Functor.Functor' instance this is recommended over
+-- 'Data.Foldable.Foldable.toList' due to its \(O(1)\) performance.
+-- Similarly, if you want to pattern-match on the 'OSet', obtain the
+-- sequence and use view patterns or pattern synonyms instead of
+-- converting to a list.
 toSeq ::
     OSet a      -- ^ set
     -> Seq a    -- ^ sequence

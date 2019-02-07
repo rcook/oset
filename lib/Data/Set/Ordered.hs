@@ -9,10 +9,10 @@ Portability : portable
 
 This module provides 'OSet', an insertion-order-preserving set as well
 as left- and right-biased wrappers 'OSetL' and 'OSetR' respectively.
-'OSet' has instances for 'Foldable' and 'Data' as well as a 'map'
-function and other features. 'Data.Semigroup.Semigroup' and
-'Data.Monoid.Monoid' type class instances are provided for 'OSetL' and
-'OSetR'.
+'OSet' has instances for 'Data.Foldable.Foldable' and 'Data.Data.Data'
+as well as a 'map' function and other features.
+'Data.Semigroup.Semigroup' and 'Data.Monoid.Monoid' type class instances
+are provided for 'OSetL' and 'OSetR'.
 
 This is intended to be API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html OSet>
 in <http://hackage.haskell.org/package/ordered-containers-0.1.1 unordered-containers>
@@ -52,10 +52,11 @@ Here's the quick-start guide to using this package:
 >     print s5 -- outputs: "fromList [100,400,900]"
 
 There are cases where the developer's natural instinct would be to
-convert the 'OSet' instance to a list using 'toList' from 'Foldable'.
-While this is possible, it will often be more efficient to use 'toSeq'
-and operate on the sequence that way. You can even use view patterns to
-pattern-match on the resulting sequence:
+convert the 'OSet' instance to a list using
+'Data.Foldable.Foldable.toList'. While this is possible, it will often
+be more efficient to use 'toSeq' and operate on the sequence that way.
+You can even use view patterns to pattern-match on the resulting
+sequence:
 
 > {-# LANGUAGE ViewPatterns #-}
 >
