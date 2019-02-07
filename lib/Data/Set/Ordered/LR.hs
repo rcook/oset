@@ -42,21 +42,6 @@ newtype OSetL a = OSetL
 deriving instance Values a OSetL
 deriving instance Ord a => PreserveL a OSetL
 
--- | \(O(1)\). A left-biased empty set.
-{-
-emptyL ::
-    OSetL a -- ^ set
-emptyL = OSetL OSet.empty
--}
-
--- | \(O(1)\). A left-biased singleton set containing the given element.
-{-
-singletonL ::
-    a           -- ^ element
-    -> OSetL a  -- ^ set
-singletonL = OSetL . OSet.singleton
--}
-
 instance Show a => Show (OSetL a) where
     show (OSetL o) = show o
 
@@ -73,21 +58,6 @@ newtype OSetR a = OSetR
 
 deriving instance Values a OSetR
 deriving instance Ord a => PreserveR a OSetR
-
--- | \(O(1)\). A right-biased empty set.
-{-
-emptyR ::
-    OSetR a -- ^ set
-emptyR = OSetR OSet.empty
--}
-
--- | \(O(1)\). A right-biased singleton set containing the given element.
-{-
-singletonR ::
-    a           -- ^ element
-    -> OSetR a  -- ^ set
-singletonR = OSetR . OSet.singleton
--}
 
 instance Show a => Show (OSetR a) where
     show (OSetR o) = show o
