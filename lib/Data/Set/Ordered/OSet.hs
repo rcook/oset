@@ -11,7 +11,6 @@ Portability : portable
 {-# OPTIONS_GHC -Wall -Werror #-}
 
 {-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE DeriveFoldable  #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NoImplicitPrelude #-}
