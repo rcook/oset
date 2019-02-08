@@ -51,9 +51,9 @@ import           Data.Data (Data)
 import           Data.Foldable (Foldable(..), foldl')
 import           Data.Maybe (Maybe(..))
 import           Data.Set.Ordered.Classes
-                    ( PreserveL(..)
+                    ( OrderedSet(..)
+                    , PreserveL(..)
                     , PreserveR(..)
-                    , Values(..)
                     )
 import           Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
@@ -104,7 +104,7 @@ instance Foldable OSet where
     foldMap f (OSet _ xsSeq) = foldMap f xsSeq
     x `elem` (OSet xsSet _) = x `elem` xsSet
 
-instance Values a OSet where
+instance OrderedSet a OSet where
     empty = OSet Set.empty Seq.empty
     singleton x = OSet (Set.singleton x) (Seq.singleton x)
     fromList = foldl' (|>) empty

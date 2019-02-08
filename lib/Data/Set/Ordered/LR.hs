@@ -27,9 +27,9 @@ import           Data.Foldable (Foldable(..))
 import           Data.Monoid (Monoid(..))
 import           Data.Semigroup (Semigroup(..))
 import           Data.Set.Ordered.Classes
-                    ( PreserveL(..)
+                    ( OrderedSet(..)
+                    , PreserveL(..)
                     , PreserveR(..)
-                    , Values(..)
                     )
 import           Data.Set.Ordered.OSet ((<>|), (|<>), OSet)
 import           Prelude (Eq, Ord, Show(..))
@@ -39,7 +39,7 @@ newtype OSetL a = OSetL
     { unOSetL :: OSet a -- ^ the wrapped 'OSet'
     } deriving (Data, Eq, Foldable, Ord)
 
-deriving instance Values a OSetL
+deriving instance OrderedSet a OSetL
 deriving instance Ord a => PreserveL a OSetL
 
 instance Show a => Show (OSetL a) where
@@ -56,7 +56,7 @@ newtype OSetR a = OSetR
     { unOSetR :: OSet a -- ^ the wrapped 'OSet'
     } deriving (Data, Eq, Foldable, Ord)
 
-deriving instance Values a OSetR
+deriving instance OrderedSet a OSetR
 deriving instance Ord a => PreserveR a OSetR
 
 instance Show a => Show (OSetR a) where

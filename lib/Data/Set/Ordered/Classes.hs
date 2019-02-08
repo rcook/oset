@@ -11,17 +11,16 @@ Portability : portable
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Data.Set.Ordered.Classes
-    ( -- * Trivial sets and conversion
-      Values(..)
+    ( -- * Common operations on ordered sets
+    OrderedSet(..)
     , -- * Insertion
       PreserveL(..)
     , PreserveR(..)
     ) where
 
--- | Trivial sets and conversions from lists. Set type is @c@, element
+-- | Common operations on ordered sets. Set type is @c@, element
 -- type is @a@.
--- TBD: Rename Values to OrderedSet
-class Values a c where
+class OrderedSet a c where
     -- | \(O(1)\). The empty set.
     empty :: c a
     -- | \(O(1)\). A singleton set containing the given element.
