@@ -20,7 +20,7 @@ executable oset-app
   main-is:              Main.hs
   build-depends:
       base              >= 4.11 && < 4.13
-    , containers        >= 0.6 && < 0.7
+    , containers        >= 0.5 && < 0.7
     , oset
 
 library
@@ -28,7 +28,7 @@ library
   hs-source-dirs:       lib
   build-depends:
       base              >= 4.11 && < 4.13
-    , containers        >= 0.6 && < 0.7
+    , containers        >= 0.5 && < 0.7
   exposed-modules:
       Data.Set.Ordered
     , Data.Set.Ordered.Classes
@@ -45,6 +45,6 @@ test-suite oset-spec
     , Data.Set.Ordered.OSetSpec
   build-depends:
       base              >= 4.11 && < 4.13
-    , containers        >= 0.6 && < 0.7
+    , containers        >= 0.5 && < 0.7
     , hspec             >= 2.6 && < 2.8
     , oset
