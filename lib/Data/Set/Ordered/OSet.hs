@@ -82,7 +82,6 @@ import           Prelude
                     ( (<$>)
                     , (.)
                     , (==)
-                    , Bool(..)
                     , Eq
                     , Int
                     , Ord
@@ -109,6 +108,10 @@ instance Values a OSet where
     empty = OSet Set.empty Seq.empty
     singleton x = OSet (Set.singleton x) (Seq.singleton x)
     fromList = foldl' (|>) empty
+    member x (OSet xsSet _) = x `Set.member` xsSet
+    notMember = (not .) . member
+    map f (OSet _ xsSeq) = foldl' (|>) empty (f <$> xsSeq)
+    filter p (OSet xsSet xsSeq) = OSet (Set.filter p xsSet) (Seq.filter p xsSeq)
 
 instance Ord a => PreserveL a OSet where
     x |< (OSet xsSet xsSeq) =
@@ -140,38 +143,6 @@ size ::
     OSet a  -- ^ set
     -> Int  -- ^ size
 size (OSet xsSet _ ) = Set.size xsSet
-
--- | \(O(log(N))\). Determine if the element is in the set.
-member :: Ord a
-    => a        -- ^ element
-    -> OSet a   -- ^ set
-    -> Bool     -- ^ 'Data.Bool.True' if element is in set, 'Data.Bool.False' otherwise
-member x (OSet xsSet _) = x `Set.member` xsSet
-
--- | \(O(log(N))\). Determine if the element is not in the set.
-notMember :: Ord a
-    => a        -- ^ element
-    -> OSet a   -- ^ set
-    -> Bool     -- ^ 'Data.Bool.True' if element is not in set, 'Data.Bool.False' otherwise
-notMember = (not .) . member
-
--- | \(O(N)\). Filter a set by returning a set whose elements satisfy the
--- predicate.
-filter ::
-    (a -> Bool) -- ^ predicate
-    -> OSet a   -- ^ set
-    -> OSet a   -- ^ set
-filter p (OSet xsSet xsSeq) = OSet (Set.filter p xsSet) (Seq.filter p xsSeq)
-
--- | \(O(N log(N))\). Return the set obtained by applying a function to each
--- element of this set. Note that the resulting set may be smaller than the
--- original. Along with the 'Ord' constraint, this means that 'OSet' cannot
--- provide a lawful 'Data.Functor.Functor' instance.
-map :: Ord b
-    => (a -> b) -- ^ function
-    -> OSet a   -- ^ set
-    -> OSet b   -- ^ set
-map f (OSet _ xsSeq) = foldl' (|>) empty (f <$> xsSeq)
 
 -- | \(O(1)\). Return ordered sequence of elements in set. For obtaining
 -- a useful 'Data.Functor.Functor' instance this is recommended over

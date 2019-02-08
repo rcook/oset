@@ -20,6 +20,7 @@ module Data.Set.Ordered.Classes
 
 -- | Trivial sets and conversions from lists. Set type is @c@, element
 -- type is @a@.
+-- TBD: Rename Values to OrderedSet
 class Values a c where
     -- | \(O(1)\). The empty set.
     empty :: c a
@@ -32,6 +33,23 @@ class Values a c where
     -- to return a list of the elements in the original insert order
     -- with duplicates removed.
     fromList :: Ord a => [a] -> c a
+    -- | \(O(log(N))\). Determine if the element is in the set.
+    -- Evaluate to 'Data.Bool.True' if element is in set,
+    -- 'Data.Bool.False' otherwise.
+    member :: Ord a => a -> c a -> Bool
+    -- | \(O(log(N))\). Determine if the element is not in the set.
+    -- Evaluate to 'Data.Bool.True' if element is not in set,
+    -- 'Data.Bool.False' otherwise.
+    notMember :: Ord a => a -> c a -> Bool
+    -- | \(O(N log(N))\). Return the set obtained by applying a function
+    -- to each element of this set. Note that the resulting set may be
+    -- smaller than the original. Along with the 'Ord' constraint, this
+    -- means that 'OSet' cannot provide a lawful 'Data.Functor.Functor'
+    -- instance.
+    map :: Ord b => (a -> b) -> c a -> c b
+    -- | \(O(N)\). Filter a set by returning a set whose elements
+    -- satisfy the predicate.
+    filter :: (a -> Bool) -> c a -> c a
 
 -- | 'Data.Set.Ordered.OSet' and 'Data.Set.Ordered.OSetL' operations
 -- that preserve elements from the left-hand operand in the case of
