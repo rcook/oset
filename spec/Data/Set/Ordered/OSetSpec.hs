@@ -69,11 +69,11 @@ spec = do
 
     describe "member and notMember" $ do
         it "handle element in set" $ do
-            (1 :: Int) `OSet.member` OSet.fromList [1, 2, 3] `shouldBe` True
-            (1 :: Int) `OSet.notMember` OSet.fromList [1, 2, 3] `shouldBe` False
+            1 `OSet.member` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` True
+            1 `OSet.notMember` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` False
         it "handle element not in set" $ do
-            (10 :: Int) `OSet.member` OSet.fromList [1, 2, 3] `shouldBe` False
-            (10 :: Int) `OSet.notMember` OSet.fromList [1, 2, 3] `shouldBe` True
+            10 `OSet.member` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` False
+            10 `OSet.notMember` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` True
 
     describe "elem" $ do
         it "handle element in set" $
@@ -199,7 +199,8 @@ spec = do
 
     describe "singleton" $
         it "contains one element" $ do
-            let o = OSet.singleton (5 :: Int)
+            let o :: OSet Int
+                o = OSet.singleton 5
             o `shouldBe` OSet.fromList [5]
             5 `OSet.member` o `shouldBe` True
             5 `OSet.notMember` o `shouldBe` False
@@ -208,7 +209,8 @@ spec = do
 
     describe "filter" $
         it "removes all even elements" $ do
-            let a = OSet.fromList [1 :: Int, 2, 3, 4]
+            let a :: OSet Int
+                a = OSet.fromList [1, 2, 3, 4]
             1 `OSet.member` a `shouldBe` True
             2 `OSet.member` a `shouldBe` True
             3 `OSet.member` a `shouldBe` True
@@ -224,7 +226,8 @@ spec = do
 
     describe "map" $ do
         it "transforms elements" $ do
-            let a = OSet.fromList [-1 :: Int, 1, -2, 2]
+            let a :: OSet Int
+                a = OSet.fromList [-1, 1, -2, 2]
             (-1) `OSet.member` a `shouldBe` True
             1 `OSet.member` a `shouldBe` True
             (-2) `OSet.member` a `shouldBe` True
@@ -238,7 +241,8 @@ spec = do
             3 `OSet.member` b `shouldBe` True
             length b `shouldBe` 4
         it "gloriously violates the functor laws" $ do
-            let a = OSet.fromList [-1 :: Int, 1, -2, 2]
+            let a :: OSet Int
+                a = OSet.fromList [-1, 1, -2, 2]
             (-1) `OSet.member` a `shouldBe` True
             1 `OSet.member` a `shouldBe` True
             (-2) `OSet.member` a `shouldBe` True
