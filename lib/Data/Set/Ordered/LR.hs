@@ -10,12 +10,22 @@ Portability : portable
 
 {-# OPTIONS_GHC -Wall -Werror #-}
 
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE StandaloneDeriving #-}
+
+#undef SEMIGROUP_MONOID_UNIFICATION
+#ifdef MIN_VERSION_GLASGOW_HASKELL
+#if MIN_VERSION_GLASGOW_HASKELL(7,10,2,0)
+#if MIN_VERSION_base(4,11,0)
+#define SEMIGROUP_MONOID_UNIFICATION
+#endif
+#endif
+#endif
 
 module Data.Set.Ordered.LR
     ( OSetL(..)
@@ -50,6 +60,9 @@ instance Ord a => Semigroup (OSetL a) where
 
 instance Ord a => Monoid (OSetL a) where
     mempty = empty
+#ifndef SEMIGROUP_MONOID_UNIFICATION
+    mappend = (<>)
+#endif
 
 -- | A right-biased 'OSet'.
 newtype OSetR a = OSetR
@@ -67,3 +80,6 @@ instance Ord a => Semigroup (OSetR a) where
 
 instance Ord a => Monoid (OSetR a) where
     mempty = empty
+#ifndef SEMIGROUP_MONOID_UNIFICATION
+    mappend = (<>)
+#endif

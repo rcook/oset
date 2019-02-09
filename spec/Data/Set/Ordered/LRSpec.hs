@@ -10,9 +10,23 @@ Portability : portable
 
 {-# OPTIONS_GHC -Wall -Werror #-}
 
+{-# LANGUAGE CPP #-}
+
+#undef SEMIGROUP_MONOID_UNIFICATION
+#ifdef MIN_VERSION_GLASGOW_HASKELL
+#if MIN_VERSION_GLASGOW_HASKELL(7,10,2,0)
+#if MIN_VERSION_base(4,11,0)
+#define SEMIGROUP_MONOID_UNIFICATION
+#endif
+#endif
+#endif
+
 module Data.Set.Ordered.LRSpec (spec) where
 
 import           Data.Foldable (Foldable(..))
+#ifndef SEMIGROUP_MONOID_UNIFICATION
+import           Data.Semigroup (Semigroup(..))
+#endif
 import           Data.Set.Ordered
                     ( (|<>)
                     , (<>|)
