@@ -1,6 +1,7 @@
-[![Travis branch](https://img.shields.io/travis/rcook/oset/master.svg)](https://travis-ci.org/rcook/oset)
+[![Travis CI](https://img.shields.io/travis/rcook/oset/master.svg)](https://travis-ci.org/rcook/oset)
 [![Hackage](https://img.shields.io/hackage/v/oset.svg)](http://hackage.haskell.org/package/oset)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/rcook/oset/master/LICENSE)
+[![Hackage dependencies](https://img.shields.io/hackage-deps/v/oset.svg)](http://hackage.haskell.org/package/oset)
+[![GitHub licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/rcook/oset/master/LICENSE)
 
 # oset
 
