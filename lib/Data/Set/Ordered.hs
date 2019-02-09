@@ -20,15 +20,19 @@ but with a few extra type class instances.
 
 Here's the quick-start guide to using this package:
 
+> {-# LANGUAGE PatternSynonyms #-}
+>
 > module Main (main) where
 >
-> import           Data.Set.Ordered ((|>), (|<), (|<>))
+> import           Data.Set.Ordered ((|>), (|<), (|<>), OSet)
 > import qualified Data.Set.Ordered as OSet
+> import           Data.Sequence (Seq(..))
 >
 > main :: IO ()
 > main = do
 >     -- Create from list
->     let s0 = OSet.fromListL [1 :: Int, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
+>     let s0 :: OSet Int
+>         s0 = OSet.fromListL [1, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
 >     print s0 -- outputs: "fromListL [1,2,3,4,-1,-2,-3]"
 >
 >     -- Append
@@ -50,6 +54,13 @@ Here's the quick-start guide to using this package:
 >     -- Filter
 >     let s5 = OSet.filter (>= 100) s4
 >     print s5 -- outputs: "fromListL [100,400,900]"
+>
+>     -- Pattern matching
+>     print $ foldWithPatternSynonyms (OSet.toSeq s5)
+>
+> foldWithPatternSynonyms :: Show a => Seq a -> String
+> foldWithPatternSynonyms Empty = ""
+> foldWithPatternSynonyms (x :<| xs) = show x ++ foldWithPatternSynonyms xs
 
 There are cases where the developer's natural instinct would be to
 convert the 'OSet' instance to a list using
