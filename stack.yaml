@@ -1,3 +1,1 @@
-resolver: lts-13.3
-packages:
-- .
+stack-lts-13.3.yaml
