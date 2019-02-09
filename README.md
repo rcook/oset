@@ -6,19 +6,18 @@
 
 An insertion-order-preserving set
 
-* Implements subset of `OSet` API from [`ordered-containers`][ordered-containers] but is otherwise API-compatible with it
-* Adds useful instances for `Semigroup`, `Monoid`, `Data`
+* Mostly API-compatible with `OSet` [`ordered-containers`][ordered-containers]
+* Adds class instance for `Data`
+* Adds class instances for `Semigroup` and `Monoid` via `OSetL` and `OSetR` wrappers
+
+## Incompatibilities with `OSet` from [`ordered-containers`][ordered-containers]
+
+* `fromList` is renamed `fromListL`
+* `fromListR` is introduced by analogy with `fromListL`
 
 ## Documentation
 
 [View documentation on Hackage][docs]
-
-## Build and test
-
-```bash
-stack clean
-stack build --test
-```
 
 ## Licence
 
