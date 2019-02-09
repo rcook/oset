@@ -30,8 +30,8 @@ import           Data.Semigroup (Semigroup(..))
 import           Data.Set.Ordered
                     ( (|<>)
                     , (<>|)
-                    , OSetL(..)
-                    , OSetR(..)
+                    , OSetL
+                    , OSetR
                     , empty
                     , singleton
                     )
@@ -57,7 +57,8 @@ spec = do
         it "contains no values" $
             toList (mempty :: OSetL Int) `shouldBe` ([] :: [Int])
         it "is neutral element" $ do
-            let a = OSetL $ OSet.fromListL [4 :: Int, 3, 4, 1, 9]
+            let a :: OSetL Int
+                a = OSet.fromListL [4, 3, 4, 1, 9]
             (mempty :: OSetL Int) <> a `shouldBe` a
             a <> (mempty :: OSetL Int) `shouldBe` a
     describe "|<>" $ do
@@ -81,7 +82,7 @@ spec = do
                 `shouldBe` [4, 3, 1, 9, 8, 7, 6, 5, 2, 0]
         it "is associative" $ do
             let a :: OSetL Int
-                a = OSet.fromListL [4 :: Int, 3, 4, 1, 9]
+                a = OSet.fromListL [4, 3, 4, 1, 9]
                 b = OSet.fromListL [9, 8..0]
                 c = OSet.fromListL [-1, 10]
                 result = OSet.fromListL [4, 3, 1, 9, 8, 7, 6, 5, 2, 0, -1, 10]
@@ -106,7 +107,8 @@ spec = do
         it "contains no values" $
             toList (mempty :: OSetR Int) `shouldBe` ([] :: [Int])
         it "is neutral element" $ do
-            let a = OSetR $ OSet.fromListL [4 :: Int, 3, 4, 1, 9]
+            let a :: OSetR Int
+                a = OSet.fromListL [4, 3, 4, 1, 9]
             (mempty :: OSetR Int) <> a `shouldBe` a
             a <> (mempty :: OSetR Int) `shouldBe` a
     describe "<>|" $ do
@@ -130,7 +132,7 @@ spec = do
                 `shouldBe` [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
         it "is associative" $ do
             let a :: OSetR Int
-                a = OSet.fromListL [4 :: Int, 3, 4, 1, 9]
+                a = OSet.fromListL [4, 3, 4, 1, 9]
                 b = OSet.fromListL [9, 8..0]
                 c = OSet.fromListL [-1, 10]
                 result = OSet.fromListL [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, 10]

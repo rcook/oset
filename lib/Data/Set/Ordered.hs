@@ -85,8 +85,8 @@ sequence:
 
 module Data.Set.Ordered
     ( OSet
-    , OSetL(..)
-    , OSetR(..)
+    , OSetL
+    , OSetR
     , -- * Trivial sets
       empty
     , singleton

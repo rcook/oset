@@ -28,8 +28,8 @@ Portability : portable
 #endif
 
 module Data.Set.Ordered.LR
-    ( OSetL(..)
-    , OSetR(..)
+    ( OSetL
+    , OSetR
     ) where
 
 import           Data.Data (Data)
@@ -45,9 +45,7 @@ import           Data.Set.Ordered.OSet ((<>|), (|<>), OSet)
 import           Prelude (Eq, Ord, Show(..))
 
 -- | A left-biased 'OSet'.
-newtype OSetL a = OSetL
-    { unOSetL :: OSet a -- ^ the wrapped 'OSet'
-    } deriving (Data, Eq, Foldable, Ord)
+newtype OSetL a = OSetL (OSet a) deriving (Data, Eq, Foldable, Ord)
 
 deriving instance OrderedSet a OSetL
 deriving instance Ord a => PreserveL a OSetL
@@ -65,9 +63,7 @@ instance Ord a => Monoid (OSetL a) where
 #endif
 
 -- | A right-biased 'OSet'.
-newtype OSetR a = OSetR
-    { unOSetR :: OSet a -- ^ the wrapped 'OSet'
-    } deriving (Data, Eq, Foldable, Ord)
+newtype OSetR a = OSetR (OSet a) deriving (Data, Eq, Foldable, Ord)
 
 deriving instance OrderedSet a OSetR
 deriving instance Ord a => PreserveR a OSetR
