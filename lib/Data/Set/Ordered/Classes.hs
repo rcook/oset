@@ -9,14 +9,28 @@ Portability : portable
 -}
 
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
 module Data.Set.Ordered.Classes
     ( -- * Common operations on ordered sets
-    OrderedSet(..)
+      Index
+    , OrderedSet(..)
     , -- * Insertion
       PreserveL(..)
     , PreserveR(..)
     ) where
+
+import           Data.Sequence (Seq)
+import           Prelude
+                    ( Bool
+                    , Eq
+                    , Int
+                    , Maybe
+                    , Ord
+                    )
+
+-- | A zero-based index with respect to insertion order.
+type Index = Int
 
 -- | Common operations on ordered sets. Set type is @c@, element
 -- type is @a@.
@@ -49,6 +63,30 @@ class OrderedSet a c where
     -- | \(O(N)\). Filter a set by returning a set whose elements
     -- satisfy the predicate.
     filter :: (a -> Bool) -> c a -> c a
+    -- | \(O(1)\). The number of elements in the set.
+    size :: c a -> Int
+    -- | \(O(1)\). Return ordered sequence of elements in set. For
+    -- obtaining a useful 'Data.Functor.Functor' instance this is
+    -- recommended over 'Data.Foldable.Foldable.toList' due to its
+    -- \(O(1)\) performance. Similarly, if you want to pattern-match on
+    -- the 'OSet', obtain the sequence and use view patterns or pattern
+    -- synonyms instead of converting to a list.
+    toSeq :: c a -> Seq a
+    -- | \(O(N)\). Convert the set to an ascending list of elements.
+    toAscList :: c a -> [a]
+    -- | \(O(N)\). Finds the index of the leftmost element that matches
+    -- the specified element or returns 'Nothing' if no matching element
+    -- can be found.
+    findIndex :: Eq a => a -> c a -> Maybe Index
+    -- | \(O(log(min(i, N - i)))\). Return the element at the specified
+    -- position, \(i\), counting from 0. If the specified position is
+    -- out of range, this function returns 'Nothing'.
+    elemAt :: c a -> Index -> Maybe a
+    -- | \(O(log N)\). Delete an element from the set.
+    delete :: Ord a => a -> c a -> c a
+    -- | \(O(N M)\). Find the set difference: @r \\\\ s@ removes all @M@
+    -- values in @s@ from @r@ with @N@ values.
+    (\\) :: Ord a => c a -> c a -> c a
 
 -- | 'Data.Set.Ordered.OSet' and 'Data.Set.Ordered.OSetL' operations
 -- that preserve elements from the left-hand operand in the case of

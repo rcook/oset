@@ -168,29 +168,29 @@ spec = do
 
     describe "findIndex" $ do
         it "finds element" $
-            (1 :: Int) `OSet.findIndex` OSet.fromList [5, 4, 3, 2, 1]
+            1 `OSet.findIndex` (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int)
                 `shouldBe` Just 4
         it "finds nothing" $
-            (10 :: Int) `OSet.findIndex` OSet.fromList [5, 4, 3, 2, 1]
+            10 `OSet.findIndex` (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int)
                 `shouldBe` Nothing
 
     describe "elemAt" $ do
         it "returns element" $ do
-            OSet.fromList [1, 2, 3, 4, 5] `OSet.elemAt` 0
-                `shouldBe` (Just 1 :: Maybe Int)
-            OSet.fromList [1, 2, 3, 4, 5] `OSet.elemAt` 1
-                `shouldBe` (Just 2 :: Maybe Int)
-            OSet.fromList [5, 4, 3, 2, 1] `OSet.elemAt` 0
-                `shouldBe` (Just 5 :: Maybe Int)
-            OSet.fromList [5, 4, 3, 2, 1] `OSet.elemAt` 1
-                `shouldBe` (Just 4 :: Maybe Int)
+            (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int) `OSet.elemAt` 0
+                `shouldBe` Just 1
+            (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int) `OSet.elemAt` 1
+                `shouldBe` Just 2
+            (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int) `OSet.elemAt` 0
+                `shouldBe` Just 5
+            (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int) `OSet.elemAt` 1
+                `shouldBe` Just 4
         it "returns nothing if index out of range" $ do
-            OSet.empty `OSet.elemAt` 0
-                `shouldBe` (Nothing :: Maybe Int)
-            OSet.empty `OSet.elemAt` (-10)
-                `shouldBe` (Nothing :: Maybe Int)
-            OSet.empty `OSet.elemAt` 10
-                `shouldBe` (Nothing :: Maybe Int)
+            (OSet.empty :: OSet Int) `OSet.elemAt` 0
+                `shouldBe` Nothing
+            (OSet.empty :: OSet Int) `OSet.elemAt` (-10)
+                `shouldBe` Nothing
+            (OSet.empty :: OSet Int) `OSet.elemAt` 10
+                `shouldBe` Nothing
 
     describe "toAscList" $
         it "returns elements in ascending order" $
@@ -255,7 +255,8 @@ spec = do
             length b `shouldBe` 2
 
     describe "toSeq" $ do
-        let a = OSet.fromList [4 :: Int, 1, 3, 9, 9, 3, 1, 4]
+        let a :: OSet Int
+            a = OSet.fromList [4, 1, 3, 9, 9, 3, 1, 4]
         it "provides Functor instance" $
             show <$> OSet.toSeq a `shouldBe` Seq.fromList ["4", "1", "3", "9"]
         it "provides viewl" $ do

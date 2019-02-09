@@ -14,14 +14,15 @@ Portability : portable
 
 module Main (main) where
 
-import           Data.Set.Ordered ((|>), (|<), (|<>))
+import           Data.Set.Ordered ((|>), (|<), (|<>), OSet)
 import qualified Data.Set.Ordered as OSet
 import           Data.Sequence (Seq(..))
 
 main :: IO ()
 main = do
     -- Create from list
-    let s0 = OSet.fromList [1 :: Int, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
+    let s0 :: OSet Int
+        s0 = OSet.fromList [1, 2, 3, 4, 4, 3, 2, 1, -1, -2, -3]
     print s0 -- outputs: "fromList [1,2,3,4,-1,-2,-3]"
 
     -- Append
