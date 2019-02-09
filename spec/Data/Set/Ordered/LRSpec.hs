@@ -35,7 +35,7 @@ import           Data.Set.Ordered
                     , empty
                     , singleton
                     )
-import qualified Data.Set.Ordered as OSet (fromList)
+import qualified Data.Set.Ordered as OSet (fromListL)
 import           Test.Hspec (Spec, describe, it, shouldBe)
 
 spec :: Spec
@@ -57,34 +57,34 @@ spec = do
         it "contains no values" $
             toList (mempty :: OSetL Int) `shouldBe` ([] :: [Int])
         it "is neutral element" $ do
-            let a = OSetL $ OSet.fromList [4 :: Int, 3, 4, 1, 9]
+            let a = OSetL $ OSet.fromListL [4 :: Int, 3, 4, 1, 9]
             (mempty :: OSetL Int) <> a `shouldBe` a
             a <> (mempty :: OSetL Int) `shouldBe` a
     describe "|<>" $ do
         it "removes duplicates" $
-            toList ((OSet.fromList [4, 3, 4, 1, 9] :: OSetL Int)
-                |<> OSet.fromList [9, 8..0])
+            toList ((OSet.fromListL [4, 3, 4, 1, 9] :: OSetL Int)
+                |<> OSet.fromListL [9, 8..0])
                 `shouldBe` [4, 3, 1, 9, 8, 7, 6, 5, 2, 0]
         it "is associative" $ do
             let a :: OSetL Int
-                a = OSet.fromList [4, 3, 4, 1, 9]
-                b = OSet.fromList [9, 8..0]
-                c = OSet.fromList [-1, 10]
-                result = OSet.fromList [4, 3, 1, 9, 8, 7, 6, 5, 2, 0, -1, 10]
+                a = OSet.fromListL [4, 3, 4, 1, 9]
+                b = OSet.fromListL [9, 8..0]
+                c = OSet.fromListL [-1, 10]
+                result = OSet.fromListL [4, 3, 1, 9, 8, 7, 6, 5, 2, 0, -1, 10]
             a |<> b |<> c `shouldBe` result
             (a |<> b) |<> c `shouldBe` result
             a |<> (b |<> c) `shouldBe` result
     describe "<>" $ do
         it "removes duplicates" $
-            toList ((OSet.fromList [4, 3, 4, 1, 9] :: OSetL Int)
-                <> OSet.fromList [9, 8..0])
+            toList ((OSet.fromListL [4, 3, 4, 1, 9] :: OSetL Int)
+                <> OSet.fromListL [9, 8..0])
                 `shouldBe` [4, 3, 1, 9, 8, 7, 6, 5, 2, 0]
         it "is associative" $ do
             let a :: OSetL Int
-                a = OSet.fromList [4 :: Int, 3, 4, 1, 9]
-                b = OSet.fromList [9, 8..0]
-                c = OSet.fromList [-1, 10]
-                result = OSet.fromList [4, 3, 1, 9, 8, 7, 6, 5, 2, 0, -1, 10]
+                a = OSet.fromListL [4 :: Int, 3, 4, 1, 9]
+                b = OSet.fromListL [9, 8..0]
+                c = OSet.fromListL [-1, 10]
+                result = OSet.fromListL [4, 3, 1, 9, 8, 7, 6, 5, 2, 0, -1, 10]
             a <> b <> c `shouldBe` result
             (a <> b) <> c `shouldBe` result
             a <> (b <> c) `shouldBe` result
@@ -106,34 +106,34 @@ spec = do
         it "contains no values" $
             toList (mempty :: OSetR Int) `shouldBe` ([] :: [Int])
         it "is neutral element" $ do
-            let a = OSetR $ OSet.fromList [4 :: Int, 3, 4, 1, 9]
+            let a = OSetR $ OSet.fromListL [4 :: Int, 3, 4, 1, 9]
             (mempty :: OSetR Int) <> a `shouldBe` a
             a <> (mempty :: OSetR Int) `shouldBe` a
     describe "<>|" $ do
         it "removes duplicates" $
-            toList ((OSet.fromList [4, 3, 4, 1, 9] :: OSetR Int)
-                <>| OSet.fromList [9, 8..0])
+            toList ((OSet.fromListL [4, 3, 4, 1, 9] :: OSetR Int)
+                <>| OSet.fromListL [9, 8..0])
                 `shouldBe` [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
         it "is associative" $ do
             let a :: OSetR Int
-                a = OSet.fromList [4, 3, 4, 1, 9]
-                b = OSet.fromList [9, 8..0]
-                c = OSet.fromList [-1, 10]
-                result = OSet.fromList [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, 10]
+                a = OSet.fromListL [4, 3, 4, 1, 9]
+                b = OSet.fromListL [9, 8..0]
+                c = OSet.fromListL [-1, 10]
+                result = OSet.fromListL [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, 10]
             a <>| b <>| c `shouldBe` result
             (a <>| b) <>| c `shouldBe` result
             a <>| (b <>| c) `shouldBe` result
     describe "<>" $ do
         it "removes duplicates" $
-            toList ((OSet.fromList [4, 3, 4, 1, 9] :: OSetR Int)
-                <> OSet.fromList [9, 8..0])
+            toList ((OSet.fromListL [4, 3, 4, 1, 9] :: OSetR Int)
+                <> OSet.fromListL [9, 8..0])
                 `shouldBe` [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
         it "is associative" $ do
             let a :: OSetR Int
-                a = OSet.fromList [4 :: Int, 3, 4, 1, 9]
-                b = OSet.fromList [9, 8..0]
-                c = OSet.fromList [-1, 10]
-                result = OSet.fromList [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, 10]
+                a = OSet.fromListL [4 :: Int, 3, 4, 1, 9]
+                b = OSet.fromListL [9, 8..0]
+                c = OSet.fromListL [-1, 10]
+                result = OSet.fromListL [9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, 10]
             a <> b <> c `shouldBe` result
             (a <> b) <> c `shouldBe` result
             a <> (b <> c) `shouldBe` result

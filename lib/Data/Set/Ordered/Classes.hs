@@ -45,7 +45,14 @@ class OrderedSet a c where
     -- function 'Data.Foldable.Foldable.toList', \(O(N)\), can be used
     -- to return a list of the elements in the original insert order
     -- with duplicates removed.
-    fromList :: Ord a => [a] -> c a
+    fromListL :: Ord a => [a] -> c a
+    -- | \(O(N log(N))\). Create a set from a finite list of elements.
+    -- If an element occurs multiple times in the original list, only
+    -- the last occurrence is retained in the resulting set. The
+    -- function 'Data.Foldable.Foldable.toList', \(O(N)\), can be used
+    -- to return a list of the elements in the original insert order
+    -- with duplicates removed.
+    fromListR :: Ord a => [a] -> c a
     -- | \(O(log(N))\). Determine if the element is in the set.
     -- Evaluate to 'Data.Bool.True' if element is in set,
     -- 'Data.Bool.False' otherwise.

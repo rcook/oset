@@ -34,19 +34,19 @@ spec :: Spec
 spec = do
     describe "equals" $
         it "compares as expected" $ do
-            (OSet.fromList [4, 3, 4, 1, 9] :: OSet Int)
-                `shouldBe` OSet.fromList [4, 3, 1, 9]
-            (OSet.fromList [4, 3, 4, 1, 9] :: OSet Int)
-                `shouldNotBe` OSet.fromList [3, 4, 1, 9]
+            (OSet.fromListL [4, 3, 4, 1, 9] :: OSet Int)
+                `shouldBe` OSet.fromListL [4, 3, 1, 9]
+            (OSet.fromListL [4, 3, 4, 1, 9] :: OSet Int)
+                `shouldNotBe` OSet.fromListL [3, 4, 1, 9]
 
     describe "compare" $
         it "compares as expected" $ do
             let a :: OSet Int
-                a = OSet.fromList [4, 3, 4, 1, 9]
+                a = OSet.fromListL [4, 3, 4, 1, 9]
                 b :: OSet Int
-                b = OSet.fromList [4, 3, 1, 9]
+                b = OSet.fromListL [4, 3, 1, 9]
                 c :: OSet Int
-                c = OSet.fromList [4, 3, 1]
+                c = OSet.fromListL [4, 3, 1]
             a `compare` b `shouldBe` EQ
             a `compare` c `shouldBe` GT
             b `compare` c `shouldBe` GT
@@ -55,13 +55,24 @@ spec = do
 
     describe "show" $
         it "shows content in list syntax" $
-            show (OSet.fromList [4, 3, 4, 1, 9] :: OSet Int)
+            show (OSet.fromListL [4, 3, 4, 1, 9] :: OSet Int)
                 `shouldBe` "fromList [4,3,1,9]"
 
-    describe "fromList" $
-        it "removes duplicates" $
-            toList (OSet.fromList [4, 3, 4, 1, 9] :: OSet Int)
+    describe "fromListL" $ do
+        it "removes duplicates (left-biased)" $
+            toList (OSet.fromListL [4, 3, 4, 1, 9] :: OSet Int)
                 `shouldBe` [4, 3, 1, 9]
+        it "doesn't show up in show output" $ -- The set does not remember how it was constructed
+            show (OSet.fromListL [4, 3, 4, 1, 9] :: OSet Int)
+                `shouldBe` "fromList [4,3,1,9]"
+
+    describe "fromListR" $ do
+        it "removes duplicates (right-biased)" $
+            toList (OSet.fromListR [4, 3, 4, 1, 9] :: OSet Int)
+                `shouldBe` [3, 4, 1, 9]
+        it "doesn't show up in show output" $ -- The set does not remember how it was constructed
+            show (OSet.fromListR [4, 3, 4, 1, 9] :: OSet Int)
+                `shouldBe` "fromList [3,4,1,9]"
 
     describe "empty" $
         it "contains no values" $
@@ -69,120 +80,120 @@ spec = do
 
     describe "member and notMember" $ do
         it "handle element in set" $ do
-            1 `OSet.member` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` True
-            1 `OSet.notMember` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` False
+            1 `OSet.member` (OSet.fromListL [1, 2, 3] :: OSet Int) `shouldBe` True
+            1 `OSet.notMember` (OSet.fromListL [1, 2, 3] :: OSet Int) `shouldBe` False
         it "handle element not in set" $ do
-            10 `OSet.member` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` False
-            10 `OSet.notMember` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` True
+            10 `OSet.member` (OSet.fromListL [1, 2, 3] :: OSet Int) `shouldBe` False
+            10 `OSet.notMember` (OSet.fromListL [1, 2, 3] :: OSet Int) `shouldBe` True
 
     describe "elem" $ do
         it "handle element in set" $
-            1 `elem` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` True
+            1 `elem` (OSet.fromListL [1, 2, 3] :: OSet Int) `shouldBe` True
         it "handle element not in set" $
-            10 `elem` (OSet.fromList [1, 2, 3] :: OSet Int) `shouldBe` False
+            10 `elem` (OSet.fromListL [1, 2, 3] :: OSet Int) `shouldBe` False
 
     describe "insertion with <|" $ do
         it "conses new element" $
-            5 <| (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
-                `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
+            5 <| (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int)
+                `shouldBe` OSet.fromListL [5, 4, 1, 3, 9]
         it "prefers elements from right" $
-            9 <| (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
-                `shouldBe` OSet.fromList [4, 1, 3, 9]
+            9 <| (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int)
+                `shouldBe` OSet.fromListL [4, 1, 3, 9]
 
     describe "insertion with |<" $ do
         it "conses new element" $
-            5 |< (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
-                `shouldBe` OSet.fromList [5, 4, 1, 3, 9]
+            5 |< (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int)
+                `shouldBe` OSet.fromListL [5, 4, 1, 3, 9]
         it "prefers elements from left" $
-            9 |< (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
-                `shouldBe` OSet.fromList [9, 4, 1, 3]
+            9 |< (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int)
+                `shouldBe` OSet.fromListL [9, 4, 1, 3]
 
     describe "insertion with >|" $ do
         it "appends new element" $
-            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int) >| 5
-                `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
+            (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int) >| 5
+                `shouldBe` OSet.fromListL [4, 1, 3, 9, 5]
         it "prefers elements from right" $
-            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int) >| 4
-                `shouldBe` OSet.fromList [1, 3, 9, 4]
+            (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int) >| 4
+                `shouldBe` OSet.fromListL [1, 3, 9, 4]
 
     describe "insertion with |>" $ do
         it "appends new element" $
-            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int) |> 5
-                `shouldBe` OSet.fromList [4, 1, 3, 9, 5]
+            (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int) |> 5
+                `shouldBe` OSet.fromListL [4, 1, 3, 9, 5]
         it "prefers elements from left" $
-            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int) |> 4
-                `shouldBe` OSet.fromList [4, 1, 3, 9]
+            (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int) |> 4
+                `shouldBe` OSet.fromListL [4, 1, 3, 9]
 
     describe "append with <>|" $ do
         it "appends sets" $
-            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
-            <>| OSet.fromList [5, 5, 6, 6, 7, 7]
-                `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
+            (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int)
+            <>| OSet.fromListL [5, 5, 6, 6, 7, 7]
+                `shouldBe` OSet.fromListL [4, 1, 3, 9, 5, 6, 7]
         it "prefers elements from right" $
-            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
-                <>| OSet.fromList [4, 4, 5, 5, 6, 6, 7, 7]
-                `shouldBe` OSet.fromList [1, 3, 9, 4, 5, 6, 7]
+            (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int)
+                <>| OSet.fromListL [4, 4, 5, 5, 6, 6, 7, 7]
+                `shouldBe` OSet.fromListL [1, 3, 9, 4, 5, 6, 7]
 
     describe "append with |<>" $ do
         it "appends sets" $
-            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
-                |<> OSet.fromList [5, 5, 6, 6, 7, 7]
-                `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
+            (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int)
+                |<> OSet.fromListL [5, 5, 6, 6, 7, 7]
+                `shouldBe` OSet.fromListL [4, 1, 3, 9, 5, 6, 7]
         it "prefers elements from left" $
-            (OSet.fromList [4, 1, 3, 9, 1] :: OSet Int)
-                |<> OSet.fromList [4, 4, 5, 5, 6, 6, 7, 7]
-                `shouldBe` OSet.fromList [4, 1, 3, 9, 5, 6, 7]
+            (OSet.fromListL [4, 1, 3, 9, 1] :: OSet Int)
+                |<> OSet.fromListL [4, 4, 5, 5, 6, 6, 7, 7]
+                `shouldBe` OSet.fromListL [4, 1, 3, 9, 5, 6, 7]
 
     describe "null" $ do
         it "returns True for empty set" $ do
-            null (OSet.fromList [] :: OSet Int) `shouldBe` True
+            null (OSet.fromListL [] :: OSet Int) `shouldBe` True
             null (OSet.empty :: OSet Int) `shouldBe` True
         it "returns False for non-empty set" $
             null (OSet.singleton 1 :: OSet Int) `shouldBe` False
 
     describe "size" $ do
         it "returns 0 empty set" $ do
-            OSet.size (OSet.fromList [] :: OSet Int) `shouldBe` 0
+            OSet.size (OSet.fromListL [] :: OSet Int) `shouldBe` 0
             OSet.size (OSet.empty :: OSet Int) `shouldBe` 0
         it "returns length for non-empty set" $ do
             OSet.size (OSet.singleton 1 :: OSet Int) `shouldBe` 1
-            OSet.size (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int) `shouldBe` 5
-            OSet.size (OSet.fromList [1, 1, 2, 2, 3, 3] :: OSet Int) `shouldBe` 3
+            OSet.size (OSet.fromListL [1, 2, 3, 4, 5] :: OSet Int) `shouldBe` 5
+            OSet.size (OSet.fromListL [1, 1, 2, 2, 3, 3] :: OSet Int) `shouldBe` 3
 
     describe "delete" $ do
         it "deletes element when in set" $
-            1 `OSet.delete` (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int)
-                `shouldBe` OSet.fromList [2, 3, 4, 5]
+            1 `OSet.delete` (OSet.fromListL [1, 2, 3, 4, 5] :: OSet Int)
+                `shouldBe` OSet.fromListL [2, 3, 4, 5]
         it "does not fail when element not in set" $
-            6 `OSet.delete` (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int)
-                `shouldBe` OSet.fromList [1, 2, 3, 4, 5]
+            6 `OSet.delete` (OSet.fromListL [1, 2, 3, 4, 5] :: OSet Int)
+                `shouldBe` OSet.fromListL [1, 2, 3, 4, 5]
 
     describe "\\\\" $
         it "removes specified elements" $ do
-            (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int)
-                \\ OSet.fromList []
-                `shouldBe` OSet.fromList [1, 2, 3, 4, 5]
-            (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int)
-                \\ OSet.fromList [3, 2, 1]
-                `shouldBe` OSet.fromList [4, 5]
+            (OSet.fromListL [1, 2, 3, 4, 5] :: OSet Int)
+                \\ OSet.fromListL []
+                `shouldBe` OSet.fromListL [1, 2, 3, 4, 5]
+            (OSet.fromListL [1, 2, 3, 4, 5] :: OSet Int)
+                \\ OSet.fromListL [3, 2, 1]
+                `shouldBe` OSet.fromListL [4, 5]
 
     describe "findIndex" $ do
         it "finds element" $
-            1 `OSet.findIndex` (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int)
+            1 `OSet.findIndex` (OSet.fromListL [5, 4, 3, 2, 1] :: OSet Int)
                 `shouldBe` Just 4
         it "finds nothing" $
-            10 `OSet.findIndex` (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int)
+            10 `OSet.findIndex` (OSet.fromListL [5, 4, 3, 2, 1] :: OSet Int)
                 `shouldBe` Nothing
 
     describe "elemAt" $ do
         it "returns element" $ do
-            (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int) `OSet.elemAt` 0
+            (OSet.fromListL [1, 2, 3, 4, 5] :: OSet Int) `OSet.elemAt` 0
                 `shouldBe` Just 1
-            (OSet.fromList [1, 2, 3, 4, 5] :: OSet Int) `OSet.elemAt` 1
+            (OSet.fromListL [1, 2, 3, 4, 5] :: OSet Int) `OSet.elemAt` 1
                 `shouldBe` Just 2
-            (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int) `OSet.elemAt` 0
+            (OSet.fromListL [5, 4, 3, 2, 1] :: OSet Int) `OSet.elemAt` 0
                 `shouldBe` Just 5
-            (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int) `OSet.elemAt` 1
+            (OSet.fromListL [5, 4, 3, 2, 1] :: OSet Int) `OSet.elemAt` 1
                 `shouldBe` Just 4
         it "returns nothing if index out of range" $ do
             (OSet.empty :: OSet Int) `OSet.elemAt` 0
@@ -194,14 +205,14 @@ spec = do
 
     describe "toAscList" $
         it "returns elements in ascending order" $
-            OSet.toAscList (OSet.fromList [5, 4, 3, 2, 1] :: OSet Int)
+            OSet.toAscList (OSet.fromListL [5, 4, 3, 2, 1] :: OSet Int)
                 `shouldBe` [1, 2, 3, 4, 5]
 
     describe "singleton" $
         it "contains one element" $ do
             let o :: OSet Int
                 o = OSet.singleton 5
-            o `shouldBe` OSet.fromList [5]
+            o `shouldBe` OSet.fromListL [5]
             5 `OSet.member` o `shouldBe` True
             5 `OSet.notMember` o `shouldBe` False
             6 `OSet.member` o `shouldBe` False
@@ -210,14 +221,14 @@ spec = do
     describe "filter" $
         it "removes all even elements" $ do
             let a :: OSet Int
-                a = OSet.fromList [1, 2, 3, 4]
+                a = OSet.fromListL [1, 2, 3, 4]
             1 `OSet.member` a `shouldBe` True
             2 `OSet.member` a `shouldBe` True
             3 `OSet.member` a `shouldBe` True
             4 `OSet.member` a `shouldBe` True
             length a `shouldBe` 4
             let b = OSet.filter odd a
-            b `shouldBe` OSet.fromList [1, 3]
+            b `shouldBe` OSet.fromListL [1, 3]
             1 `OSet.member` b `shouldBe` True
             2 `OSet.member` b `shouldBe` False
             3 `OSet.member` b `shouldBe` True
@@ -227,14 +238,14 @@ spec = do
     describe "map" $ do
         it "transforms elements" $ do
             let a :: OSet Int
-                a = OSet.fromList [-1, 1, -2, 2]
+                a = OSet.fromListL [-1, 1, -2, 2]
             (-1) `OSet.member` a `shouldBe` True
             1 `OSet.member` a `shouldBe` True
             (-2) `OSet.member` a `shouldBe` True
             2 `OSet.member` a `shouldBe` True
             length a `shouldBe` 4
             let b = OSet.map (+ 1) a
-            b `shouldBe` OSet.fromList [0, 2, -1, 3]
+            b `shouldBe` OSet.fromListL [0, 2, -1, 3]
             0 `OSet.member` b `shouldBe` True
             2 `OSet.member` b `shouldBe` True
             (-1) `OSet.member` b `shouldBe` True
@@ -242,21 +253,21 @@ spec = do
             length b `shouldBe` 4
         it "gloriously violates the functor laws" $ do
             let a :: OSet Int
-                a = OSet.fromList [-1, 1, -2, 2]
+                a = OSet.fromListL [-1, 1, -2, 2]
             (-1) `OSet.member` a `shouldBe` True
             1 `OSet.member` a `shouldBe` True
             (-2) `OSet.member` a `shouldBe` True
             2 `OSet.member` a `shouldBe` True
             length a `shouldBe` 4
             let b = OSet.map (\x -> x * x) a
-            b `shouldBe` OSet.fromList [1, 4]
+            b `shouldBe` OSet.fromListL [1, 4]
             1 `OSet.member` b `shouldBe` True
             4 `OSet.member` b `shouldBe` True
             length b `shouldBe` 2
 
     describe "toSeq" $ do
         let a :: OSet Int
-            a = OSet.fromList [4, 1, 3, 9, 9, 3, 1, 4]
+            a = OSet.fromListL [4, 1, 3, 9, 9, 3, 1, 4]
         it "provides Functor instance" $
             show <$> OSet.toSeq a `shouldBe` Seq.fromList ["4", "1", "3", "9"]
         it "provides viewl" $ do

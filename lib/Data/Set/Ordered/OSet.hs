@@ -40,7 +40,8 @@ module Data.Set.Ordered.OSet
     , elemAt
     , findIndex
     , -- * Conversion
-      fromList
+      fromListL
+    , fromListR
     , toAscList
     , toSeq
     , -- * Miscellaneous
@@ -104,7 +105,8 @@ instance Foldable OSet where
 instance OrderedSet a OSet where
     empty = OSet Set.empty Seq.empty
     singleton x = OSet (Set.singleton x) (Seq.singleton x)
-    fromList = foldl' (|>) empty
+    fromListL = foldl' (|>) empty
+    fromListR = foldl' (>|) empty
     member x (OSet xsSet _) = x `Set.member` xsSet
     notMember = (not .) . member
     map f (OSet _ xsSeq) = foldl' (|>) empty (f <$> xsSeq)
