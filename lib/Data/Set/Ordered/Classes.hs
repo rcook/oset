@@ -64,8 +64,8 @@ class OrderedSet a c where
     -- | \(O(N log(N))\). Return the set obtained by applying a function
     -- to each element of this set. Note that the resulting set may be
     -- smaller than the original. Along with the 'Ord' constraint, this
-    -- means that 'OSet' cannot provide a lawful 'Data.Functor.Functor'
-    -- instance.
+    -- means that 'Data.Set.Ordered.OSet.OSet' cannot provide a lawful
+    -- 'Data.Functor.Functor' instance.
     map :: Ord b => (a -> b) -> c a -> c b
     -- | \(O(N)\). Filter a set by returning a set whose elements
     -- satisfy the predicate.
@@ -76,18 +76,19 @@ class OrderedSet a c where
     -- obtaining a useful 'Data.Functor.Functor' instance this is
     -- recommended over 'Data.Foldable.Foldable.toList' due to its
     -- \(O(1)\) performance. Similarly, if you want to pattern-match on
-    -- the 'OSet', obtain the sequence and use view patterns or pattern
-    -- synonyms instead of converting to a list.
+    -- the 'Data.Set.Ordered.OSet.OSet', obtain the sequence and use
+    -- view patterns or pattern synonyms instead of converting to a
+    -- list.
     toSeq :: c a -> Seq a
     -- | \(O(N)\). Convert the set to an ascending list of elements.
     toAscList :: c a -> [a]
     -- | \(O(N)\). Finds the index of the leftmost element that matches
-    -- the specified element or returns 'Nothing' if no matching element
-    -- can be found.
+    -- the specified element or returns 'GHC.Maybe.Nothing' if no
+    -- matching element can be found.
     findIndex :: Eq a => a -> c a -> Maybe Index
     -- | \(O(log(min(i, N - i)))\). Return the element at the specified
     -- position, \(i\), counting from 0. If the specified position is
-    -- out of range, this function returns 'Nothing'.
+    -- out of range, this function returns 'GHC.Maybe.Nothing'.
     elemAt :: c a -> Index -> Maybe a
     -- | \(O(log N)\). Delete an element from the set.
     delete :: Ord a => a -> c a -> c a
@@ -95,9 +96,9 @@ class OrderedSet a c where
     -- values in @s@ from @r@ with @N@ values.
     (\\) :: Ord a => c a -> c a -> c a
 
--- | 'Data.Set.Ordered.OSet' and 'Data.Set.Ordered.OSetL' operations
--- that preserve elements from the left-hand operand in the case of
--- duplicate elements. Set type is @c@, element type is @a@.
+-- | 'Data.Set.Ordered.OSet.OSet' and 'Data.Set.Ordered.OSetL'
+-- operations that preserve elements from the left-hand operand in the
+-- case of duplicate elements. Set type is @c@, element type is @a@.
 class PreserveL a c where
     -- | \(O(log(N))\) if the element is not in the set, \(O(N)\) if the
     -- element is already in the set. Add an element to the left end of
@@ -118,9 +119,9 @@ class PreserveL a c where
     (|<>) :: c a -> c a -> c a
     infixr 6 |<>
 
--- | 'Data.Set.Ordered.OSet' and 'Data.Set.Ordered.OSetR' operations
--- that preserve elements from the right-hand operand in the case of
--- duplicate elements. Set type is @c@, element type is @a@.
+-- | 'Data.Set.Ordered.OSet.OSet' and 'Data.Set.Ordered.OSetR'
+-- operations that preserve elements from the right-hand operand in the
+-- case of duplicate elements. Set type is @c@, element type is @a@.
 class PreserveR a c where
     -- | \(O(log(N))\). Add an element to the left end of the sequence
     -- if the set does not already contain the element. Otherwise ignore
