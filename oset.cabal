@@ -3,7 +3,7 @@ version:                0.4.0.0
 x-revision: 4
 synopsis:               An insertion-order-preserving set
 description:
-    This package provides @OSet@, an insertion-order-preserving set, with type class instances for @Foldable@ and @Data@ as well as wrappers, @OSetL@ and @OSetR@ with left- and right-biased instances of @Semigroup@ and @Monoid@ respectively.
+    This package provides @OSet@, an insertion-order-preserving set, with type class instances for @Foldable@ and @Data@ as well as wrappers, @OSetL@ and @OSetR@, with left- and right-biased instances of @Semigroup@ and @Monoid@ respectively.
 homepage:               https://github.com/rcook/oset#readme
 license:                MIT
 license-file:           LICENSE

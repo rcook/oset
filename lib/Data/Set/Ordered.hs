@@ -14,9 +14,10 @@ as well as a 'map' function and other features.
 'Data.Semigroup.Semigroup' and 'Data.Monoid.Monoid' type class instances
 are provided for 'OSetL' and 'OSetR'.
 
-This is intended to be API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html OSet>
+This is intended to be mostly API-compatible with <http://hackage.haskell.org/package/ordered-containers-0.1.1/docs/Data-Set-Ordered.html OSet>
 in <http://hackage.haskell.org/package/ordered-containers-0.1.1 unordered-containers>
-but with a few extra type class instances.
+but with a few extra type class instances provided via @newtype@
+wrappers.
 
 Here's the quick-start guide to using this package:
 
