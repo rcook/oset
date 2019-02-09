@@ -10,13 +10,23 @@ Portability : portable
 
 {-# OPTIONS_GHC -Wall -Werror #-}
 
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE PatternSynonyms #-}
+
+#undef WORKING_PATTERN_SYNONYMS
+#ifdef MIN_VERSION_GLASGOW_HASKELL
+#if MIN_VERSION_GLASGOW_HASKELL(8,2,2,0)
+#define WORKING_PATTERN_SYNONYMS
+#endif
+#endif
 
 module Main (main) where
 
 import           Data.Set.Ordered ((|>), (|<), (|<>), OSet)
 import qualified Data.Set.Ordered as OSet
+#ifdef WORKING_PATTERN_SYNONYMS
 import           Data.Sequence (Seq(..))
+#endif
 
 main :: IO ()
 main = do
@@ -45,9 +55,13 @@ main = do
     let s5 = OSet.filter (>= 100) s4
     print s5 -- outputs: "fromListL [100,400,900]"
 
+#ifdef WORKING_PATTERN_SYNONYMS
     -- Pattern matching
     print $ foldWithPatternSynonyms (OSet.toSeq s5)
+#endif
 
+#ifdef WORKING_PATTERN_SYNONYMS
 foldWithPatternSynonyms :: Show a => Seq a -> String
 foldWithPatternSynonyms Empty = ""
 foldWithPatternSynonyms (x :<| xs) = show x ++ foldWithPatternSynonyms xs
+#endif

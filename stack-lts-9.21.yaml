@@ -1,0 +1,6 @@
+resolver: lts-9.21
+packages:
+- .
+extra-deps:
+- containers-0.5.8.1
+allow-newer: true
