@@ -60,4 +60,6 @@ run_fail_fast stack test
 
 run_fail_fast stack haddock
 
+run_fail_fast bin/CheckDocPrograms.hs -d lib -p base -p containers -p oset
+
 report_success "All pre-push steps succeeded"
