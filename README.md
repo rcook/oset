@@ -1,6 +1,8 @@
 [![Travis CI](https://img.shields.io/travis/rcook/oset/master.svg)](https://travis-ci.org/rcook/oset)
 [![Hackage](https://img.shields.io/hackage/v/oset.svg)](http://hackage.haskell.org/package/oset)
 [![Hackage dependencies](https://img.shields.io/hackage-deps/v/oset.svg)](http://hackage.haskell.org/package/oset)
+[![Stackage Nightly](http://stackage.org/package/oset/badge/nightly)](http://stackage.org/nightly/package/oset)
+[![Stackage LTS](http://stackage.org/package/oset/badge/lts)](http://stackage.org/lts/package/oset)
 [![Licence](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/rcook/oset/master/LICENSE)
 
 # oset
