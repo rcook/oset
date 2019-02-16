@@ -17,6 +17,20 @@ import           Control.Monad (when)
 import           Data.List (groupBy)
 import           Data.Traversable (for)
 import           Options.Applicative
+                    ( execParser
+                    , fullDesc
+                    , help
+                    , helper
+                    , info
+                    , long
+                    , many
+                    , metavar
+                    , option
+                    , progDesc
+                    , short
+                    , some
+                    , str
+                    )
 import           System.Exit (exitFailure, exitSuccess)
 import           System.FilePath.Glob (glob)
 import           System.IO (hClose, hPutStr)
