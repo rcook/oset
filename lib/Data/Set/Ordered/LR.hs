@@ -41,7 +41,7 @@ import           Data.Set.Ordered.Classes
                     , PreserveL(..)
                     , PreserveR(..)
                     )
-import           Data.Set.Ordered.OSet ((<>|), (|<>), OSet)
+import           Data.Set.Ordered.OSet (OSet)
 import           Prelude (Eq, Ord, Show(..))
 
 -- | A left-biased 'OSet'.
